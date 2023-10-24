@@ -185,4 +185,6 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'DB' => Illuminate\Support\Facades\DB::class,
+
 ];
