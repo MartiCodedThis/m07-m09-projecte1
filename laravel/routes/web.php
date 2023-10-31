@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use App\Http\Controllers\MailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,5 +24,8 @@ Route::get('/', function () {
 Route::get('/dashboard', function (Request $request) {
    $request->session()->flash('info', 'TEST flash messages');
    return view('dashboard');
-})->middleware(['auth','verified'])->name('dashboard');;
+})->middleware(['auth','verified'])->name('dashboard');
+
+Route::get('mail/test', [MailController::class, 'test']);
+
 
