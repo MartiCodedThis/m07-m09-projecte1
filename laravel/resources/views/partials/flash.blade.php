@@ -1,12 +1,19 @@
-@php
-$tailwindClass = [
-    'success' => 'p-5 text-[#0f5132] bg-[#d1e7dd] border border-[#badbcc] rounded',
-    'danger'  => 'p-5 text-[#842029] bg-[#f8d7da] border border-[#f5c2c7] rounded',
-    'warning' => 'p-5 text-[#664d03] bg-[#fff3cd] border border-[#ffecb5] rounded',
-    'info'    => 'p-5 text-[#055160] bg-[#cff4fc] border border-[#b6effb] rounded',
-]
-@endphp
-<div class="{{ $tailwindClass[$type] }}" role="alert">
-    {{ $message }}
-    <button type="button" class="float-right" data-dismiss-target="alert" aria-label="Close">X</button>
+<div id="flash">
+@if ($message = Session::get('success'))
+  @include('partials.flash-message', ['type' => "success", 'message' => $message])
+@endif
+@if ($message = Session::get('error'))
+  @include('partials.flash-message', ['type' => "danger", 'message' => $message])
+@endif
+@if ($message = Session::get('warning'))
+  @include('partials.flash-message', ['type' => "warning", 'message' => $message])
+@endif
+@if ($message = Session::get('info'))
+  @include('partials.flash-message', ['type' => "info", 'message' => $message])
+@endif
+@if ($errors->any())
+   @foreach ($errors->all() as $error)
+       @include('partials.flash-message', ['type' => "danger", 'message' => $error])
+   @endforeach
+@endif
 </div>

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\FileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,5 +28,7 @@ Route::get('/dashboard', function (Request $request) {
 })->middleware(['auth','verified'])->name('dashboard');
 
 Route::get('mail/test', [MailController::class, 'test']);
+
+Route::resource('files', FileController::class);
 
 
