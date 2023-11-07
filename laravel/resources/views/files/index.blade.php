@@ -33,15 +33,22 @@
                             <td class="py-2 px-4 text-center">{{ $file->updated_at }}</td>
                             <td class="py-2 px-4 text-center">
                                 <div class="flex flex-col w-full space-y-1">
-                                    <button type="view" class="w-full bg-gray-400 text-white py-2 px-10 rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300">View more</button>
-                                    <button type="edit" class="w-full bg-gray-400 text-white py-2 px-10 rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300">Edit</button>
-                                    <button type="delete" class="w-full bg-red-500 text-white py-2 px-10 rounded hover:bg-red-600 active:outline-none active:ring active:ring-red-300">Delete</button>
+                                    <button type="view" class="w-full bg-gray-400 text-white py-2 px-10 rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300">
+                                        <a href="{{ route('files.show', $file) }}">
+                                            View more
+                                        </a>    
+                                    </button>
                                 </div>
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
+                <div class="flex justify-between">
+                        <button type="reset" class="w-1/4 bg-gray-400 text-white py-2 px-10 rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300">
+                            <a href="{{ route('files.create') }}">Create</a>
+                        </button>
+                    </div>
             </div>
         </div>
     </div>

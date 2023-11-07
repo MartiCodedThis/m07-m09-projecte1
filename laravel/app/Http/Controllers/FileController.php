@@ -78,8 +78,15 @@ class FileController extends Controller
      * Display the specified resource.
      */
     public function show(File $file)
-    {
-        //
+    {   
+        $stored = \Storage::disk('public')->get($file->filepath);
+        if($stored){
+            return view("files.show",['file'=>$file]);
+        }
+        else{
+            return redirect()->route('files.index')
+                ->with('error','Fitxer inexistent');
+        }
     }
 
     /**
@@ -103,6 +110,15 @@ class FileController extends Controller
      */
     public function destroy(File $file)
     {
-        //
+        $stored = \Storage::disk('public')->get($file->filepath);
+        if($stored){
+            \Storage::disk('public')->delete($file->filepath);
+            $file->delete();
+            return redirect()->route('files.index');
+        }   
+        else{
+            return redirect()->route('files.show', $file)
+                ->with('error','Fitxer inexistent');
+        }
     }
 }
