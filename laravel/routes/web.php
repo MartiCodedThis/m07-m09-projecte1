@@ -23,7 +23,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
+Route::get('/dashboard', function (Request $request) {
     $request->session()->flash('info', 'TEST flash messages'); //TODO
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -36,6 +36,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('mail/test', [MailController::class, 'test']);
 
-Route::resource('files', FileController::class);
+Route::resource('files', FileController::class)
+    ->middleware(['auth', 'role:2']);
 
 require __DIR__.'/auth.php';
