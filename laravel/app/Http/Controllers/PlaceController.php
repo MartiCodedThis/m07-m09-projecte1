@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\File;
+use App\Models\Place;
 use Illuminate\Http\Request;
 
-class FileController extends Controller
+class PlaceController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view("files.index", [
-            "files" => File::all()
+        return view("places.index", [
+            "places" => Place::all()
         ]);
     }
 
@@ -22,7 +22,7 @@ class FileController extends Controller
      */
     public function create()
     {
-        return view("files.create");
+        return view("places.create");
     }
 
     /**
@@ -30,10 +30,11 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-        
-
-        // Validar fitxer
         $validatedData = $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'latitude' => 'numeric',
+            'longitude' => 'numeric',
             'upload' => 'required|mimes:gif,jpeg,jpg,png|max:1024'
         ]);
    
@@ -61,6 +62,14 @@ class FileController extends Controller
                 'filepath' => $filePath,
                 'filesize' => $fileSize,
             ]);
+            $place = Place::create([
+                'name' => $request->input('name'),
+                'description' => $request->input('description'),
+                'file_id' => $file->id,
+                'latitude' => $request->input('latitude'),
+                'longitude' => $request->input('longitude'),
+                'author_id' =>  $request->user()->id
+            ]);
             \Log::debug("DB storage OK");
             // Patró PRG amb missatge d'èxit
             return redirect()->route('files.show', $file)
@@ -73,18 +82,17 @@ class FileController extends Controller
         }
     }
 
-
     /**
      * Display the specified resource.
      */
-    public function show(File $file)
-    {   
+    public function show(Place $place)
+    {
         $stored = \Storage::disk('public')->get($file->filepath);
         if($stored){
-            return view("files.show",['file'=>$file]);
+            return view("places.show",['file'=>$file]);
         }
         else{
-            return redirect()->route('files.index')
+            return redirect()->route('places.index')
                 ->with('error','Fitxer inexistent');
         }
     }
@@ -92,14 +100,14 @@ class FileController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(File $file)
+    public function edit(Place $place)
     {
         $stored = \Storage::disk('public')->get($file->filepath);
         if($stored){
-            return view("files.edit",['file'=>$file]);
+            return view("places.edit",['file'=>$file]);
         }
         else{
-            return redirect()->route('files.index')
+            return redirect()->route('places.index')
                 ->with('error','Fitxer inexistent');
         }
     }
@@ -107,59 +115,21 @@ class FileController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, File $file)
+    public function update(Request $request, Place $place)
     {
-        // Validar fitxer
-        $validatedData = $request->validate([
-            'upload' => 'required|mimes:gif,jpeg,jpg,png|max:1024'
-        ]);
-
-        // Obtenir dades del fitxer
-        $upload = $request->file('upload');
-        $fileName = $upload->getClientOriginalName();
-        $fileSize = $upload->getSize();
-        \Log::debug("Updating file '{$fileName}' ($fileSize)...");
-
-        // Pujar fitxer al disc dur
-        $uploadName = time() . '_' . $fileName;
-        $filePath = $upload->storeAs(
-            'uploads',      // Path
-            $uploadName ,   // Filename
-            'public'        // Disk
-        );
-
-        if (\Storage::disk('public')->exists($filePath)) {
-            \Log::debug("Disk storage OK");
-            $fullPath = \Storage::disk('public')->path($filePath);
-            \Log::debug("File saved at {$fullPath}");
-
-            $file->filepath = $filePath;
-            $file->filesize = $fileSize;
-            // Desar dades a BD
-            $file->save();
-            \Log::debug("DB storage OK");
-
-            // Patró PRG amb missatge d'èxit
-            return redirect()->route('files.show', $file)
-                ->with('success', 'File successfully saved');
-        } 
-        else {
-            \Log::debug("Disk storage FAILS");
-            // Patró PRG amb missatge d'error
-            return redirect()->route("files.edit", $file)
-                ->with('error', 'ERROR uploading file');
-        }
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(File $file)
+    public function destroy(Place $place)
     {
         $stored = \Storage::disk('public')->get($file->filepath);
         if($stored){
             \Storage::disk('public')->delete($file->filepath);
             $file->delete();
+            $place->delete();
             return redirect()->route('files.index');
         }   
         else{
