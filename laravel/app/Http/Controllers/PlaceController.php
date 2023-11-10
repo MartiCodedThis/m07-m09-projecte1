@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Place;
+use App\Models\File;
 use Illuminate\Http\Request;
 
 class PlaceController extends Controller
@@ -44,7 +45,6 @@ class PlaceController extends Controller
         $fileSize = $upload->getSize();
         \Log::debug("Storing file '{$fileName}' ($fileSize)...");
 
-
         // Pujar fitxer al disc dur
         $uploadName = time() . '_' . $fileName;
         $filePath = $upload->storeAs(
@@ -72,12 +72,12 @@ class PlaceController extends Controller
             ]);
             \Log::debug("DB storage OK");
             // Patró PRG amb missatge d'èxit
-            return redirect()->route('files.show', $file)
+            return redirect()->route('places.show', $file)
                 ->with('success', 'File successfully saved');
         } else {
             \Log::debug("Disk storage FAILS");
             // Patró PRG amb missatge d'error
-            return redirect()->route("files.create")
+            return redirect()->route("places.create")
                 ->with('error', 'ERROR uploading file');
         }
     }
@@ -87,14 +87,7 @@ class PlaceController extends Controller
      */
     public function show(Place $place)
     {
-        $stored = \Storage::disk('public')->get($file->filepath);
-        if($stored){
-            return view("places.show",['file'=>$file]);
-        }
-        else{
-            return redirect()->route('places.index')
-                ->with('error','Fitxer inexistent');
-        }
+        return view("places.show")->with(['place' => $place]);
     }
 
     /**
@@ -102,14 +95,7 @@ class PlaceController extends Controller
      */
     public function edit(Place $place)
     {
-        $stored = \Storage::disk('public')->get($file->filepath);
-        if($stored){
-            return view("places.edit",['file'=>$file]);
-        }
-        else{
-            return redirect()->route('places.index')
-                ->with('error','Fitxer inexistent');
-        }
+        return view("places.edit")->with('place', $place);
     }
 
     /**
@@ -117,7 +103,87 @@ class PlaceController extends Controller
      */
     public function update(Request $request, Place $place)
     {
-        //
+        $oldfilePath = $place->file->filepath;
+
+        $validatedData = $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'latitude' => 'numeric',
+            'longitude' => 'numeric',
+            'upload' => 'required|mimes:gif,jpeg,jpg,png|max:1024'
+        ]);
+
+        if ($request->hasFile('upload')){
+            // Obtenir dades del fitxer
+            $upload = $request->file('upload');
+            $fileName = $upload->getClientOriginalName();
+            $fileSize = $upload->getSize();
+            \Log::debug("Storing file '{$fileName}' ($fileSize)...");
+
+
+            // Pujar fitxer al disc dur
+            $uploadName = time() . '_' . $fileName;
+            $filePath = $upload->storeAs(
+                'uploads',      // Path
+                $uploadName ,   // Filename
+                'public'        // Disk
+            );
+    
+            if (\Storage::disk('public')->exists($filePath)) {
+                \Log::debug("Disk storage OK");
+                $fullPath = \Storage::disk('public')->path($filePath);
+                \Log::debug("File saved at {$fullPath}");
+                \Storage::disk('public')->delete($oldfilePath);
+                $file_id = File::where('filepath',$filePath)->where('filesize',$fileSize)->first();
+                // Desar dades a BD
+                $file->update([
+                    'filepath' => $filePath,
+                    'filesize' => $fileSize,
+                ]);
+                $place->update([
+                    'name' => $request->input('name'),
+                    'description' => $request->input('description'),
+                    'file_id' => $file->id,
+                    'latitude' => $request->input('latitude'),
+                    'longitude' => $request->input('longitude'),
+                    'author_id' =>  $request->user()->id
+                ]);
+                \Log::debug("DB storage OK");
+                // Patró PRG amb missatge d'èxit
+                return redirect()->route('places.show', $place)
+                    ->with('success', 'File successfully saved');
+            } else {
+                \Log::debug("Disk storage FAILS");
+                // Patró PRG amb missatge d'error
+                return redirect()->route("places.create")
+                    ->with('error', 'ERROR uploading file');
+            }
+        }else{
+
+            $file_id = File::where('filepath', $place->file->filepath)->where('filesize', $place->file->filesize)->first();
+            
+            if ($file_id){
+                $place->update([
+                    'name' => $request->input('name'),
+                    'description' => $request->input('description'),
+                    'file_id' => $file_id->id,
+                    'latitude' => $request->input('latitude'),
+                    'longitude' => $request->input('longitude'),
+                    'author_id' => $request->user()->id,
+                ]);
+                \Log::debug("DB storage OK");
+                // Patró PRG amb missatge d'èxit
+                return redirect()->route('places.show', $place)
+                    ->with('success', 'File successfully saved');
+            } else {
+                return redirect()->route("places.edit", $place)
+                    ->with('error', 'ERROR uploading file');
+            }
+            \Log::debug("Disk storage FAILS");
+            // Patró PRG amb missatge d'error
+            return redirect()->route("places.edit", $place)
+                ->with('error', 'ERROR uploading file');
+        }
     }
 
     /**
@@ -125,15 +191,15 @@ class PlaceController extends Controller
      */
     public function destroy(Place $place)
     {
-        $stored = \Storage::disk('public')->get($file->filepath);
+        $stored = \Storage::disk('public')->get($place->file->filepath);
+
         if($stored){
-            \Storage::disk('public')->delete($file->filepath);
-            $file->delete();
+            \Storage::disk('public')->delete($place->file->filepath);
             $place->delete();
-            return redirect()->route('files.index');
+            return redirect()->route('places.index');
         }   
         else{
-            return redirect()->route('files.show', $file)
+            return redirect()->route('places.show', $place)
                 ->with('error','Fitxer inexistent');
         }
     }

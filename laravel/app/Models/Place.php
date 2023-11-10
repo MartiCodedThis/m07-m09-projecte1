@@ -15,7 +15,7 @@ class Place extends Model
         'file_id',
         'latitude',
         'longitude',
-        'author'
+        'author_id'
     ];
 
     public function file(){

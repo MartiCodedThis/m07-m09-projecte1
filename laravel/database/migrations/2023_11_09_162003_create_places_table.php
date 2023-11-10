@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('name', 255);
             $table->string('description', 255);
-            $table->bigInteger('file_id', 20);
+            $table->bigInteger('file_id')->unsigned();
             $table->float('latitude');
             $table->float('longitude');
-            $table->bigInteger('author_id', 20);
+            $table->bigInteger('author_id')->unsigned();
+            $table->foreign('file_id')->references('id')->on('files');
+            $table->foreign('author_id')->references('id')->on('users');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });
