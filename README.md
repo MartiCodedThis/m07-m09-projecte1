@@ -1,1 +1,2 @@
-# m07-m09-projecte1
+# Projecte M07-M09 Laravel
+Aplicació Laravel creada per Martí Soler Tello i Marc Rius Egozcue
