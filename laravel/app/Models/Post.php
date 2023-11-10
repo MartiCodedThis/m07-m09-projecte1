@@ -5,19 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class File extends Model
+class Post extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'filepath',
-        'filesize',
+        'body',
+        'file_id',
+        'latitude',
+        'longitude',
+        // 'visibility_id',
+        'author_id',
     ];
 
-    
-    public function post()
+    public function file()
     {
-        return $this->hasOne(Post::class);
+        return $this->belongsTo(File::class);
     }
 
     public function user()
