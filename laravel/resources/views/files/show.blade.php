@@ -31,9 +31,7 @@
                             <td class="py-2 px-4 text-center">{{ $file->updated_at }}</td>
                             <td class="py-2 px-4 text-center">
                                 <div class="flex flex-col w-full space-y-1">
-                                        <button type="edit" class="w-full bg-gray-400 text-white py-2 px-10 rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300"> 
-                                            <a href="{{ route('files.edit', $file) }}"> Edit </a> 
-                                        </button>
+                                    <a href="{{ route('files.edit', $file) }}" class="w-full bg-gray-400 text-white py-2 px-10 text:center  rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300"> Edit </a> 
                                     <form method="POST" action="{{ route('files.destroy', $file) }}">
                                         @csrf
                                         @method('DELETE')

@@ -191,16 +191,11 @@ class PlaceController extends Controller
      */
     public function destroy(Place $place)
     {
-        $stored = \Storage::disk('public')->get($place->file->filepath);
-
-        if($stored){
-            \Storage::disk('public')->delete($place->file->filepath);
-            $place->delete();
-            return redirect()->route('places.index');
-        }   
-        else{
-            return redirect()->route('places.show', $place)
-                ->with('error','Fitxer inexistent');
-        }
+        $filepath = $place->file->filepath;
+        \Storage::disk('public')->delete($filepath);
+        $place->delete();
+        $post->file->delete();
+        return redirect()->route('places.index')
+            ->with('success', 'File successfully deleted');
     }
 }

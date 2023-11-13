@@ -15,6 +15,7 @@ class UserSeeder extends Seeder
             'name'      => config('admin.name'),
             'email'     => config('admin.email'),
             'password'  => Hash::make(config('admin.password')),
+            'role_id'   => '2'
         ]);
         $admin->save();
     } 

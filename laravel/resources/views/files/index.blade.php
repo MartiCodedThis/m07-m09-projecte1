@@ -45,9 +45,7 @@
                     </tbody>
                 </table>
                 <div class="flex justify-between">
-                        <button type="reset" class="w-1/4 bg-gray-400 text-white py-2 px-10 rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300">
-                            <a href="{{ route('files.create') }}">Create</a>
-                        </button>
+                        <a class="w-1/4 bg-gray-400 text-white py-2 px-10 text-center rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300" href="{{ route('files.create') }}">Create</a>
                     </div>
             </div>
         </div>
