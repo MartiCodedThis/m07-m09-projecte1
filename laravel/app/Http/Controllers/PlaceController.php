@@ -14,7 +14,7 @@ class PlaceController extends Controller
     public function index()
     {
         return view("places.index", [
-            "places" => Place::all()
+            "places" => Place::paginate(5),
         ]);
     }
 
@@ -194,7 +194,7 @@ class PlaceController extends Controller
         $filepath = $place->file->filepath;
         \Storage::disk('public')->delete($filepath);
         $place->delete();
-        $post->file->delete();
+        $place->file->delete();
         return redirect()->route('places.index')
             ->with('success', 'File successfully deleted');
     }
