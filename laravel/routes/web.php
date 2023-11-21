@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\PlaceController; 
-use App\Http\Controllers\PostController;     
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('mail/test', [MailController::class, 'test']);
+
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::resource('files', FileController::class)->middleware(['auth', 'role:2']);
 
