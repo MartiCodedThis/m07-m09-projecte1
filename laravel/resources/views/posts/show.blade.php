@@ -20,15 +20,21 @@
     </div>
     <div class="flex justify-between text-gray-600">
         <p>{{ $post->created_at->diffForHumans() }}</p>
+        <form action="{{ route('posts.like', $post) }}" method="POST">
+            @csrf
+            @if($liked)
+                @method('DELETE')
+                <button type="submit" class="bg-gray-400 text-white py-2 px-10 text-center rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300">Unlike</button>
+            @else
+                <button type="submit" class="bg-gray-400 text-white py-2 px-10 text-center rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300">Like</button>
+            @endif
+        </form> 
     </div>
 </div>
 <div class="flex items-center justify-center space-x-4 mt-2">    
-    <a href="{{ route('posts.edit', $post) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline-yellow active:bg-yellow-800">
-        Editar
-    </a>
-    
-    <form action="{{ route('posts.destroy', $post) }}" method="POST" onsubmit="return confirm('¿Estás seguro?')" style="display: inline;">
+    <form action="{{ route('posts.destroy', $post) }}" method="POST" onsubmit="return confirm('¿Estás seguro?')">
         @csrf
+        <button onclick="window.location.href='{{ route('posts.edit', $post) }}'" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline-yellow active:bg-yellow-800">Editar</button>
         @method('DELETE')
         <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline-red active:bg-red-800">
             Eliminar

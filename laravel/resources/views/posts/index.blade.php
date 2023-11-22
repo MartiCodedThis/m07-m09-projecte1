@@ -8,19 +8,20 @@
     </x-slot>
 
     <div class="py-12">
-    <a href="{{ route('posts.create') }}"><button class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline-blue focus:border-blue-700 active:bg-blue-800 mt-2 ml-12">Nuevo Post +</button></a>           
-
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
-                {{-- Formulario de búsqueda --}}
-                <form action="{{ route('posts.index') }}" method="GET" class="mb-4">
-                    @csrf
-                    <div class="flex">
-                        <input type="text" name="search" placeholder="Buscar en el cuerpo del post" class="form-input flex-grow mr-2" />
-                        <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded">Buscar</button>
-                    </div>
-                </form>
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-10">
+                <h1 class="text-2xl font-semibold mb-4">Post list</h1>
+                <div class="flex justify-between">
+                    <a href="{{ route('posts.create') }}" class="w-1/4 bg-gray-400 text-white py-2 px-10 mb-4 text-center rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300">Create post</a>
+                </div>
+                <div class="border-b border-gray-200">
+                    <form action="{{ route('posts.index') }}" method="GET" class="mb-4">
+                        @csrf
+                        <div class="flex w-full space-x-2">
+                            <input type="text" name="search" placeholder="Buscar en el cuerpo del post" class="form-input flex-grow" />
+                            <button type="submit" class="w-1/8 bg-gray-400 text-white py-2 px-10 text-center rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300">Buscar</button>
+                        </div>
+                    </form>
                     @foreach ($posts as $post)
                         <a href="{{ route('posts.show', $post->id) }}">
                             <div class="bg-white mx-auto w-full sm:w-3/4 md:w-1/2 lg:w-1/2 xl:w-1/2 border border-gray-300 rounded-lg p-4 mb-4">
@@ -33,7 +34,7 @@
                                 <p class="text-gray-700 mb-4 max-w-full break-words">{{ $post->body }}</p>
                                 <img class="w-1/1 mx-auto mb-4" src='{{ asset("storage/{$post->file->filepath}") }}' alt="File Image" />
                                 <div class="flex justify-between text-gray-600">
-                                    <p>{{ $post->created_at->diffForHumans() }}</p>
+                                    <p>{{ $post->created_at->diffForHumans() }}</p> 
                                 </div>
                             </div> 
                         </a>

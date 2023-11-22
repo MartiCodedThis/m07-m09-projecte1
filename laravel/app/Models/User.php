@@ -47,4 +47,8 @@ class User extends Authenticatable
         return $this->hasMany(Place::class, 'author_id');
     }
 
+    public function liked(){
+        return $this->belongsToMany(User::class, 'likes');
+    }
+    
 }

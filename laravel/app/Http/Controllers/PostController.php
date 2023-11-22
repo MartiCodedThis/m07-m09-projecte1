@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\File;
 use App\Models\Post;
+use App\Models\Like;
 
 class PostController extends Controller
 {
@@ -79,9 +80,19 @@ class PostController extends Controller
          }
      }
 
-    public function show(Post $post)
+    public function show(Post $post, Request $request)
     {
-        return view("posts.show")->with(['post' => $post]);
+        $user_id = $request->user()->id;
+        $post_id = $post->id;
+    
+        $liked = Like::where('user_id', $user_id)
+                 ->where('post_id', $post_id)
+                 ->exists();
+
+        return view("posts.show")->with([
+            'post' => $post,
+            'liked' => $liked
+        ]);
     }
 
     public function edit(Post $post)
@@ -185,5 +196,24 @@ class PostController extends Controller
         $post->file->delete();
         return redirect()->route('posts.index')
             ->with('success', 'File successfully eliminated');
+    }
+
+    public function like(Request $request, Post $post)
+    {
+        $user_id = $request->user()->id;
+        $post_id = $post->id;
+        $liked = Like::where('user_id', $user_id)
+            ->where('post_id',$post_id)
+            ->first();
+
+        if (!$liked) {
+            $like = Like::create([
+                'user_id' => $user_id,
+                'post_id' => $post_id
+            ]);
+        }else{
+            $liked->delete();
+        }
+        return redirect()->route('posts.show', $post); 
     }
 }

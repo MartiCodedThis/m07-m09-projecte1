@@ -1,12 +1,11 @@
 @include('partials.flash')
 
 <x-app-layout>
-   <x-slot name="header">
-       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
            {{ __('Files') }}
-       </h2>
-   </x-slot>
-
+        </h2>
+    </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -45,8 +44,8 @@
                     </tbody>
                 </table>
                 <div class="flex justify-between">
-                        <a class="w-1/4 bg-gray-400 text-white py-2 px-10 text-center rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300" href="{{ route('files.create') }}">Create</a>
-                    </div>
+                    <a class="w-1/4 bg-gray-400 text-white py-2 px-10 text-center rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300" href="{{ route('files.create') }}">Create</a>
+                </div>
             </div>
         </div>
     </div>

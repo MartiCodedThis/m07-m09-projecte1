@@ -46,5 +46,6 @@ Route::resource('files', FileController::class)->middleware(['auth', 'role:2']);
 Route::resource('places', PlaceController::class)->middleware(['auth', 'role:2']);
 
 Route::resource('posts', PostController::class)->middleware(['auth', 'role:2']);
+Route::post('/posts/{post}/like', [PostController::class, 'like'])->name('posts.like');
 
 require __DIR__.'/auth.php';
