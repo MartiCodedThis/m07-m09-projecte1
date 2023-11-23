@@ -13,6 +13,16 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                gm_font: ['Pathway Extreme', ...defaultTheme.fontFamily.sans],
+            },
+            colors:{
+                gm_bg1: '#1F2333',
+                gm_bg2: '#2F3542',
+                gm_bgborder: '#546465',
+                gm_text: '#EBEBEB',
+                gm_emphasis: '#08C4B7',
+                gm_alert: '#EF4B2B',
+                gm_notice: '#F4A52F',
             },
         },
     },

@@ -8,9 +8,9 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Pathway+Extreme:opsz,wght@8..144,300;8..144,400;8..144,700&display=swap" rel="stylesheet"> 
         <!-- Scripts -->
         @env(['local','development'])
             @vite(['resources/css/app.css', 'resources/js/app.js'])  
@@ -24,8 +24,8 @@
         @endenv
 
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <body class="font-gm_font antialiased">
+        <div class="min-h-screen bg-gm_bg1 text-gm_text">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
