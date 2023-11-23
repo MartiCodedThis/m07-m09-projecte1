@@ -44,4 +44,8 @@ Route::resource('places', PlaceController::class)->middleware(['auth', 'role:2']
 
 Route::resource('posts', PostController::class)->middleware(['auth', 'role:2']);
 
+Route::post('places/{place}/favorites', [PlaceController::class, 'favorite'])->name('places.favorite');
+Route::delete('places/{place}/favorites', [PlaceController::class, 'favorite'])->name('places.favorite');
+
+
 require __DIR__.'/auth.php';
