@@ -51,6 +51,15 @@
                     </tbody>
                 </table>
                 <img src='{{ asset("storage/{$place->file->filepath}") }}' alt="img">
+                <form  method="POST" action="{{ route('places.favorite', $place) }}">
+                    @csrf
+                    @if($fav)
+                        @method('DELETE')
+                        <button type="submit" class="w-full bg-gray-400 text-white py-2 px-10 text:center rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300">Unfav</button>
+                    @else
+                        <button type="submit" class="w-full bg-green-400 text-white py-2 px-10 text:center rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300">Fav</button>
+                    @endif
+                </form>
             </div>
         </div>
     </div>

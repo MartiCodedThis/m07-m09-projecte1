@@ -51,4 +51,9 @@ class User extends Authenticatable
         return $this->belongsToMany(User::class, 'likes');
     }
     
+    public function favorites(){
+        return $this->belongsToMany(Place::class, 'favorites');
+    }
+
+
 }

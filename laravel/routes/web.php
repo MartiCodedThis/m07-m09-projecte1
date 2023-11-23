@@ -49,4 +49,8 @@ Route::resource('posts', PostController::class)->middleware(['auth', 'role:2']);
 Route::post('/posts/{post}/like', [PostController::class, 'like'])->name('posts.like');
 Route::delete('/posts/{post}/like', [PostController::class, 'like'])->name('posts.unlike');
 
+Route::post('places/{place}/favorites', [PlaceController::class, 'favorite'])->name('places.favorite');
+Route::delete('places/{place}/favorites', [PlaceController::class, 'favorite'])->name('places.favorite');
+
+
 require __DIR__.'/auth.php';

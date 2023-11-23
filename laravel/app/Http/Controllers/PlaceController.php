@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Place;
 use App\Models\File;
+use App\Models\Favorite;
 use Illuminate\Http\Request;
 
 class PlaceController extends Controller
@@ -85,12 +86,20 @@ class PlaceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Place $place)
+    public function show(Place $place, Request $request)
     {
-        return view("places.show")->with(['place' => $place]);
+        $user_id = $request->user()->id;
+        $place_id = $place->id;
+
+        $fav = Favorite::where('user_id', $user_id)
+                 ->where('place_id', $place_id)
+                 ->exists();
+
+        return view("places.show")->with(['place' => $place, 'fav' => $fav]);
     }
 
     /**
+     * 
      * Show the form for editing the specified resource.
      */
     public function edit(Place $place)
@@ -197,5 +206,31 @@ class PlaceController extends Controller
         $place->file->delete();
         return redirect()->route('places.index')
             ->with('success', 'File successfully deleted');
+    }
+
+    public function favorite(Request $request, Place $place){
+        
+        $user_id = $request->user()->id;
+        $place_id = $place->id;
+
+        $favExists = Favorite::where('user_id', $user_id)
+        ->where('place_id', $place_id)
+        ->first();
+
+        if ($favExists) {
+            $favExists->delete();
+
+            return redirect()->route('places.show', $place)
+                ->with('warning', 'Lloc esborrat dels preferits');
+        } 
+        else {
+            $favorite = Favorite::create([
+                'user_id' => $user_id,
+                'place_id' => $place_id
+            ]);
+
+            return redirect()->route('places.show', $place)
+                ->with('success', 'Lloc afegit als teus preferits');
+        }
     }
 }
