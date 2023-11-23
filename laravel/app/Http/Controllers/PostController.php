@@ -202,17 +202,25 @@ class PostController extends Controller
     {
         $user_id = $request->user()->id;
         $post_id = $post->id;
+
         $liked = Like::where('user_id', $user_id)
-            ->where('post_id',$post_id)
+            ->where('post_id', $post_id)
             ->first();
 
-        if (!$liked) {
+        if ($liked) {
+            \Log::debug("Delete like");
+            try{
+                $rm = $liked->delete();
+                \Log::debug($rm ? "Deleted!" : "Not deleted :-(");
+            } catch (\Exception $e) {
+                \Log::debug($e->getMessage()); // Display any deletion error
+            }
+        }else{
+            \Log::debug("Create like");
             $like = Like::create([
                 'user_id' => $user_id,
                 'post_id' => $post_id
-            ]);
-        }else{
-            $liked->delete();
+            ]);            
         }
         return redirect()->route('posts.show', $post); 
     }

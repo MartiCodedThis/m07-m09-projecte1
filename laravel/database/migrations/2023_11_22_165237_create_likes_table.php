@@ -23,6 +23,7 @@ return new class extends Migration
         });
         // Eloquent compatibility workaround :-)
         Schema::table('likes', function (Blueprint $table) {
+            $table->id()->first();
             $table->unique(['user_id', 'post_id']);
         });
  
