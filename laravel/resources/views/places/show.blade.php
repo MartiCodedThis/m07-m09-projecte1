@@ -23,6 +23,7 @@
                             <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">Author ID</th>
                             <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">Created</th>
                             <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">Updated</th>
+                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">Favs</th>
                             <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">Actions</th>
                         </tr>
                     </thead>
@@ -37,6 +38,7 @@
                             <td class="py-2 px-4 text-center">{{ $place->author_id }}</td>
                             <td class="py-2 px-4 text-center">{{ $place->created_at }}</td>
                             <td class="py-2 px-4 text-center">{{ $place->updated_at }}</td>
+                            <td class="py-2 px-4 text-center">{{ $place->favorited_count }}</td>
                             <td class="py-2 px-4 text-center">
                                 <div class="flex flex-col w-full space-y-1">
                                         <a href="{{ route('places.edit', $place) }}" class="w-full bg-gray-400 text-white py-2 px-10 text:center rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300"> Edit </a> 
@@ -60,6 +62,7 @@
                         <button type="submit" class="w-full bg-green-400 text-white py-2 px-10 text:center rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300">Fav</button>
                     @endif
                 </form>
+                
             </div>
         </div>
     </div>

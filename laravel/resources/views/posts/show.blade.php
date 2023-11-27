@@ -19,7 +19,9 @@
         </div>
     </div>
     <div class="flex justify-between text-gray-600">
+        
         <p>{{ $post->created_at->diffForHumans() }}</p>
+        <div class="bg-slate-100 w-14 h-12 rounded-md text-center content-center text-green-500">{{ $post->liked_count }} likes</div>
         <form action="{{ route('posts.like', $post) }}" method="POST">
             @csrf
             @if($liked)

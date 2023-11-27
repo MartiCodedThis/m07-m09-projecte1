@@ -15,7 +15,7 @@ class PlaceController extends Controller
     public function index()
     {
         return view("places.index", [
-            "places" => Place::paginate(5),
+            "places" => Place::withCount('favorited')->paginate(5)
         ]);
     }
 
@@ -90,6 +90,7 @@ class PlaceController extends Controller
     {
         $user_id = $request->user()->id;
         $place_id = $place->id;
+        $place->loadCount('favorited');
 
         $fav = Favorite::where('user_id', $user_id)
                  ->where('place_id', $place_id)

@@ -33,6 +33,8 @@
                                 </div>
                                 <p class="text-gray-700 mb-4 max-w-full break-words">{{ $post->body }}</p>
                                 <img class="w-1/1 mx-auto mb-4" src='{{ asset("storage/{$post->file->filepath}") }}' alt="File Image" />
+                                <div class="bg-slate-100 w-14 h-12 rounded-md text-center content-center text-green-500">{{ $post->liked_count }} likes</div>
+                                
                                 <div class="flex justify-between text-gray-600">
                                     <p>{{ $post->created_at->diffForHumans() }}</p> 
                                 </div>

@@ -12,7 +12,7 @@ class PostController extends Controller
     public function index()
     {
         return view("posts.index", [
-            "posts" => Post::paginate(5),
+            "posts" => Post::withCount('liked')->paginate(5)
         ]);
     }
 
@@ -84,6 +84,7 @@ class PostController extends Controller
     {
         $user_id = $request->user()->id;
         $post_id = $post->id;
+        $post->loadCount('liked');
     
         $liked = Like::where('user_id', $user_id)
                  ->where('post_id', $post_id)
