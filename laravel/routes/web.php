@@ -52,5 +52,10 @@ Route::delete('/posts/{post}/like', [PostController::class, 'like'])->name('post
 Route::post('places/{place}/favorites', [PlaceController::class, 'favorite'])->name('places.favorite');
 Route::delete('places/{place}/favorites', [PlaceController::class, 'favorite'])->name('places.favorite');
 
+Route::get('logo', function () {
+    $path = public_path('logos/logo.png');
+    return response()->file($path);
+})->name('logo');
+
 
 require __DIR__.'/auth.php';
