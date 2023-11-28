@@ -6,6 +6,10 @@ use App\Filament\Resources\PlaceResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use App\Models\File;
+
 class CreatePlace extends CreateRecord
 {
     protected static string $resource = PlaceResource::class;
