@@ -5,6 +5,8 @@ namespace App\Filament\Resources\FileResource\Pages;
 use App\Filament\Resources\FileResource;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Storage;
+
 
 class CreateFile extends CreateRecord
 {

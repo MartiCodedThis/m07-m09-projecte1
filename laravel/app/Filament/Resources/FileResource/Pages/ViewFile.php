@@ -14,7 +14,7 @@ class ViewFile extends ViewRecord
     {
         return [
             Actions\EditAction::make(),
-            //Tables\Actions\DeleteAction::make(),
+            //Actions\DeleteAction::make(),
         ];
     }
 }

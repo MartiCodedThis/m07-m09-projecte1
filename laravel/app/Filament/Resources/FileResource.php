@@ -12,6 +12,8 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use LiveWire;
+use Illuminate\Support\Facades\Storage;
 
 class FileResource extends Resource
 {
@@ -39,9 +41,9 @@ class FileResource extends Resource
                     }),
 
                 // Declara un camp de text al formulari
-                Forms\Components\TextInput::make('filesize')
+                //Forms\Components\TextInput::make('filesize')
                     // Fa que el valor del camp sigui requerit
-                    ->required(),
+                    //->required(),
             ]);
     }
 
@@ -62,6 +64,7 @@ class FileResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

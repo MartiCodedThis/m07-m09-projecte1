@@ -41,11 +41,11 @@ Route::get('mail/test', [MailController::class, 'test']);
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::resource('files', FileController::class)->middleware(['auth', 'role:3']);
+Route::resource('files', FileController::class)->middleware(['auth', 'role:2']);
 
-Route::resource('places', PlaceController::class)->middleware(['auth', 'role:3']);
+Route::resource('places', PlaceController::class)->middleware(['auth', 'role:2']);
 
-Route::resource('posts', PostController::class)->middleware(['auth', 'role:3']);
+Route::resource('posts', PostController::class)->middleware(['auth', 'role:2']);
 Route::post('/posts/{post}/like', [PostController::class, 'like'])->name('posts.like');
 Route::delete('/posts/{post}/like', [PostController::class, 'like'])->name('posts.unlike');
 
