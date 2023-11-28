@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Filament\Models\Contracts\FilamentUser;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -56,5 +57,14 @@ class User extends Authenticatable
         return $this->belongsToMany(Place::class, 'favorites');
     }
 
+    public function canAccessFilament() : bool
+    {
+        return $this->role_id === 2 || $this->role_id === 3;
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
 
 }
