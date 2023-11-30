@@ -12,11 +12,12 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                @can('viewAny', App\Models\File::class)
+                @if (Auth::user()->can('viewAny', App\Models\File::class))
+
                     <x-nav-link :href="route('files.index')" :active="request()->routeIs('files.index')">
                         {{ __('Files') }}
                     </x-nav-link>
-                @endcan
+                @endif
                     <x-nav-link :href="route('posts.index')" :active="request()->routeIs('posts.index')">
                         {{ __('Posts') }}
                     </x-nav-link>
