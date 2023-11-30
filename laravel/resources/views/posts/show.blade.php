@@ -22,6 +22,7 @@
         
         <p>{{ $post->created_at->diffForHumans() }}</p>
         <div class="bg-slate-100 w-14 h-12 rounded-md text-center content-center text-green-500">{{ $post->liked_count }} likes</div>
+        @can('create',$post)
         <form action="{{ route('posts.like', $post) }}" method="POST">
             @csrf
             @if($liked)
@@ -30,7 +31,8 @@
             @else
                 <button type="submit" class="bg-gray-400 text-white py-2 px-10 text-center rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300">Like</button>
             @endif
-        </form> 
+        </form>
+        @endcan
     </div>
 </div>
 <div class="flex items-center justify-center space-x-4 mt-2">    

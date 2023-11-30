@@ -206,6 +206,8 @@ class PostController extends Controller
 
     public function like(Request $request, Post $post)
     {
+        $this->authorize('create', $post);
+
         $user_id = $request->user()->id;
         $post_id = $post->id;
 
