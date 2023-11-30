@@ -34,10 +34,12 @@
                     </a>
                     @endforeach
                     <div class="flex justify-end pt-4">
+                        @can('create',$post)
                         <a href="{{ route('posts.create') }}" class="flex bg-gm_emphasis text-gm_bg1 font-bold py-2 px-10 items-center rounded-full hover:bg-gm_bg1 hover:text-gm_text hover:outline hover:outline-gm_emphasis active:outline-gm_text ">
                             <x-heroicon-s-plus class="h-8 w-8"/>
                             <p>Create post</p>
                         </a>
+                        @endcan
                     </div>
                     <div>
                         {{ $posts->links() }}
