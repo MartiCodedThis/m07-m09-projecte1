@@ -34,7 +34,9 @@
                     </div>
                     <div class="flex flex-col text-white w-4/5 ml-3">
                         <div class="flex flex-row text-white justify-between">
+                        <a href="{{ route('places.show', $place->id) }}"> 
                             <h2 class="text-2xl font-semibold mb-4"> {{ $place->name }} </h2>
+                        </a>
                             <p>{{ $place->latitude }}º {{ $place->longitude }}º</p>
                         </div>
                         
@@ -70,12 +72,14 @@
         </div>
     </div>
     <nav class="flex justify-end self-end w-vw -z-1">
+    @if (Auth::user()->can('create', App\Models\Place::class))
         <div class="flex bg-gm_emphasis text-gm_bg1 font-bold py-2 px-10 items-center rounded-full hover:bg-gm_bg1 hover:text-gm_text hover:outline hover:outline-gm_emphasis active:outline-gm_text ">
             <a href="{{ route('places.create') }}">
                 <x-heroicon-s-plus class="h-8 w-8"/>
                 <p>Create</p>
             </a>
         </div>
+    @endif
     </nav>
 </x-geomir-layout>
 

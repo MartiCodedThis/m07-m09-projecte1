@@ -49,8 +49,8 @@ Route::resource('posts', PostController::class)->middleware(['auth',]);
 Route::post('/posts/{post}/like', [PostController::class, 'like'])->name('posts.like');
 Route::delete('/posts/{post}/like', [PostController::class, 'like'])->name('posts.unlike');
 
-Route::post('places/{place}/favorites', [PlaceController::class, 'favorite'])->name('places.favorite');
-Route::delete('places/{place}/favorites', [PlaceController::class, 'favorite'])->name('places.favorite');
+Route::post('places/{place}/favorites', [PlaceController::class, 'favorite'])->middleware('can:favorite,place')->name('places.favorite');
+Route::delete('places/{place}/favorites', [PlaceController::class, 'favorite'])->middleware('can:favorite,place')->name('places.favorite');
 
 Route::get('logo', function () {
     $path = public_path('logos/logo.png');

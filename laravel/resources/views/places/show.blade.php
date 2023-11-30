@@ -53,6 +53,7 @@
                     </tbody>
                 </table>
                 <img src='{{ asset("storage/{$place->file->filepath}") }}' alt="img">
+                @if (Auth::user()->can('favorite', App\Models\Place::class))
                 <form  method="POST" action="{{ route('places.favorite', $place) }}">
                     @csrf
                     @if($fav)
@@ -62,6 +63,7 @@
                         <button type="submit" class="w-full bg-green-400 text-white py-2 px-10 text:center rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300">Fav</button>
                     @endif
                 </form>
+                @endif
                 
             </div>
         </div>

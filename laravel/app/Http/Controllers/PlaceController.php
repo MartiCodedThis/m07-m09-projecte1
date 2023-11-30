@@ -9,6 +9,10 @@ use Illuminate\Http\Request;
 
 class PlaceController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Place::class, 'place');
+    }
     /**
      * Display a listing of the resource.
      */
