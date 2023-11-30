@@ -1,4 +1,4 @@
-<div id="flash">
+<div class="z-1" id="flash">
 @if ($message = Session::get('success'))
   @include('partials.flash-message', ['type' => "success", 'message' => $message])
 @endif

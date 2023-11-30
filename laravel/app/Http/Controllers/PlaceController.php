@@ -14,7 +14,7 @@ class PlaceController extends Controller
      */
     public function index()
     {
-        return view("places.index", [
+        return view("places.index",[
             "places" => Place::withCount('favorited')->paginate(5)
         ]);
     }
@@ -73,7 +73,7 @@ class PlaceController extends Controller
             ]);
             \Log::debug("DB storage OK");
             // Patró PRG amb missatge d'èxit
-            return redirect()->route('places.show', $file)
+            return redirect()->route('places.show', $place)
                 ->with('success', 'File successfully saved');
         } else {
             \Log::debug("Disk storage FAILS");

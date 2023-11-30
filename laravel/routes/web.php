@@ -41,11 +41,11 @@ Route::get('mail/test', [MailController::class, 'test']);
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::resource('files', FileController::class)->middleware(['auth', 'role:3']);
+Route::resource('files', FileController::class)->middleware(['auth',]);
 
-Route::resource('places', PlaceController::class)->middleware(['auth', 'role:3']);
+Route::resource('places', PlaceController::class)->middleware(['auth',]);
 
-Route::resource('posts', PostController::class)->middleware(['auth', 'role:3']);
+Route::resource('posts', PostController::class)->middleware(['auth',]);
 Route::post('/posts/{post}/like', [PostController::class, 'like'])->name('posts.like');
 Route::delete('/posts/{post}/like', [PostController::class, 'like'])->name('posts.unlike');
 
@@ -56,6 +56,11 @@ Route::get('logo', function () {
     $path = public_path('logos/logo.png');
     return response()->file($path);
 })->name('logo');
+
+Route::get('locationpin', function () {
+    $path = public_path('assets/locationpin.png');
+    return response()->file($path);
+})->name('locationpin');
 
 
 require __DIR__.'/auth.php';
