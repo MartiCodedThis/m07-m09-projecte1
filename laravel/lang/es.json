@@ -1,0 +1,35 @@
+{
+    "File successfully saved": "Archivo guardado correctamente",
+    "ERROR uploading file": "ERROR al subir el archivo",
+    "File does not exist": "El archivo no existe",
+    "File successfully eliminated": "Archivo eliminado correctamente",
+
+    "Files": "Archivos",
+    "Posts": "Publicaciones",
+    "Places": "Lugares",
+    "Profile": "Perfil",
+    "Log Out": "Cerrar sesión",
+
+    "Dashboard": "Tablero",
+    "You're logged in!": "¡Has iniciado sesión!",
+
+    "Post list": "Lista de posts",
+    "Search for posts...": "Buscar posts...",
+    "Search": "Buscar",
+    "Author:": "Autor:",
+    "Create post": "Crear post",
+
+    "Return": "Volver",
+    "Body:": "Cuerpo:",
+    "File:": "Archivo:",
+    "Latitude:": "Latitud:",
+    "Longitude:": "Longitud:",
+    "Create": "Crear",
+    "Edit": "Editar",
+    "Delete": "Eliminar",
+    "Reset": "Restablecer",
+
+    "Like": "Me gusta",
+    "Unlike": "No me gusta",
+    "Are you sure?": "¿Estás seguro?"
+}

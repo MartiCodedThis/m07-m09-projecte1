@@ -3,21 +3,21 @@
 <x-geomir-layout>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <h1 class="text-3xl px-6 sm:px-0 font-bold mb-4">Post list</h1>
+            <h1 class="text-3xl px-6 sm:px-0 font-bold mb-4">{{__('Post list')}}</h1>
             <div class="bg-gm_bg1 border-t-2 sm:border-2 border-gm_bg2 overflow-hidden shadow-sm sm:rounded-3xl p-10">
                 <div>
                     <form action="{{ route('posts.index') }}" method="GET" class="mb-4">
                         @csrf
                         <div class="flex w-full space-x-2">
-                            <input type="text" name="search" placeholder="Search for posts..." class="form-input flex-grow bg-gm_bg1 border-2 border-gm_bg2 rounded-full" />
-                            <button type="submit" class="bg-gm_emphasis text-gm_bg1 font-bold py-2 px-10 text-center rounded-full hover:bg-gm_bg1 hover:text-gm_text hover:outline hover:outline-gm_emphasis active:outline-gm_text">Search</button>
+                            <input type="text" name="search" placeholder="{{__('Search for posts...')}}" class="form-input flex-grow bg-gm_bg1 border-2 border-gm_bg2 rounded-full" />
+                            <button type="submit" class="bg-gm_emphasis text-gm_bg1 font-bold py-2 px-10 text-center rounded-full hover:bg-gm_bg1 hover:text-gm_text hover:outline hover:outline-gm_emphasis active:outline-gm_text">{{__('Search')}}</button>
                         </div>
                     </form>
                     @foreach ($posts as $post)
                     <a href="{{ route('posts.show', $post->id) }}">
                         <div class="mx-auto w-full p-4 mb-4 border-b-2 border-gm_bg2">
                             <div class="flex justify-between">
-                                <p class="text-gm_textsub font-light">by {{ $post->user->name }}</p>
+                                <p class="text-gm_textsub font-light">{{__('Author:')}} {{ $post->user->name }}</p>
                             </div>
                             <div class="flex justify-between mb-2">
                                 <div class="flex space-x-1 items-center">
@@ -37,7 +37,7 @@
                         @can('create',$post)
                         <a href="{{ route('posts.create') }}" class="flex bg-gm_emphasis text-gm_bg1 font-bold py-2 px-10 items-center rounded-full hover:bg-gm_bg1 hover:text-gm_text hover:outline hover:outline-gm_emphasis active:outline-gm_text ">
                             <x-heroicon-s-plus class="h-8 w-8"/>
-                            <p>Create post</p>
+                            <p>{{__('Create post')}}</p>
                         </a>
                         @endcan
                     </div>

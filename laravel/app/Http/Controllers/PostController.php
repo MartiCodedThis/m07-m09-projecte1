@@ -72,16 +72,16 @@ class PostController extends Controller
                    \Log::debug("DB storage OK");
                    // Patró PRG amb missatge d'èxit
                    return redirect()->route('posts.show', $post)
-                       ->with('success', 'File saved');
+                       ->with('success', __('File successfully saved'));
             }else{
                 return redirect()->route("posts.create")
-               ->with('error', 'ERROR uploading file');
+               ->with('error', __('ERROR uploading file'));
             }
          } else {
              \Log::debug("Disk storage FAILS");
              // Patró PRG amb missatge d'error
              return redirect()->route("posts.create")
-                 ->with('error', 'ERROR uploading file');
+                 ->with('error', __('ERROR uploading file'));
          }
      }
 
@@ -163,10 +163,10 @@ class PostController extends Controller
                     \Storage::disk('public')->delete($oldfilePath);
                     // Patró PRG amb missatge d'èxit
                     return redirect()->route('posts.show', $post)
-                        ->with('success', 'File successfully saved');
+                        ->with('success', __('File successfully saved'));
                 }else{
                     return redirect()->route("posts.edit",$post)
-                ->with('error', 'ERROR uploading file');
+                ->with('error', __('ERROR uploading file'));
                 }
     
             }else{
@@ -174,7 +174,7 @@ class PostController extends Controller
                 \Log::debug("Disk storage FAILS");
                 // Patró PRG amb missatge d'error
                 return redirect()->route("posts.edit",$post)
-                    ->with('error', 'ERROR uploading file');
+                    ->with('error', __('ERROR uploading file'));
             }
             
             
@@ -189,7 +189,7 @@ class PostController extends Controller
             ]);
             
             return redirect()->route('posts.show', $post)
-                ->with('success', 'File successfully saved'); 
+                ->with('success', __('File successfully saved')); 
             }
         }
     }
@@ -201,7 +201,7 @@ class PostController extends Controller
         $post->delete();
         $post->file->delete();
         return redirect()->route('posts.index')
-            ->with('success', 'File successfully eliminated');
+            ->with('success', __('File successfully eliminated'));
     }
 
     public function like(Request $request, Post $post)

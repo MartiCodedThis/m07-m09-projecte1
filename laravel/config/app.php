@@ -83,7 +83,13 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'ca',
+    'fallback_locale' => 'en',
+    'available_locales' => [
+        'ca' => 'Català',
+        'es' => 'Castellano',
+        'en' => 'English',
+    ],
 
     /*
     |--------------------------------------------------------------------------
