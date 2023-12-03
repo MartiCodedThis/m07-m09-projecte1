@@ -211,6 +211,19 @@ class PlaceController extends Controller
         $place->file->delete();
         return redirect()->route('places.index')
             ->with('success', 'File successfully deleted');
+
+
+        // NO FUNCIONA CORRECTAMENT EL DESTROY, LA FUNCIÓ ACTUAL NOMÉS ESBORRA LA PLACE PERO NO EL FITXER
+        // $stored = \Storage::disk('public')->get($place->file->filepath);
+        // if($stored){
+        //     \Storage::disk('public')->delete($place->file->filepath);
+        //     $place->file->delete();
+        //     return redirect()->route('places.index');
+        // }   
+        // else{
+        //     return redirect()->route('places.show', $place)
+        //         ->with('error','Fitxer inexistent');
+        // }
     }
 
     public function favorite(Request $request, Place $place){

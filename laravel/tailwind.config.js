@@ -29,3 +29,12 @@ export default {
 
     plugins: [forms],
 };
+
+module.exports = {
+    content: [
+        "./src/**/*.{html,js}",
+        "./node_modules/tw-elements/dist/plugin.cjs"
+    ],
+    plugins: [require("tw-elements/dist/js/**/*.js")],
+    darkMode: "class"
+}

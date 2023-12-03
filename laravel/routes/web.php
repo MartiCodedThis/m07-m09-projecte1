@@ -20,6 +20,8 @@ use App\Http\Controllers\HomeController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+include __DIR__.'/assets.php';
+
 
 Route::get('/', function () {
     Log::info('Loading welcome page');
@@ -46,21 +48,17 @@ Route::resource('files', FileController::class)->middleware(['auth',]);
 Route::resource('places', PlaceController::class)->middleware(['auth',]);
 
 Route::resource('posts', PostController::class)->middleware(['auth',]);
+
 Route::post('/posts/{post}/like', [PostController::class, 'like'])->name('posts.like');
 Route::delete('/posts/{post}/like', [PostController::class, 'like'])->name('posts.unlike');
 
 Route::post('places/{place}/favorites', [PlaceController::class, 'favorite'])->middleware('can:favorite,place')->name('places.favorite');
 Route::delete('places/{place}/favorites', [PlaceController::class, 'favorite'])->middleware('can:favorite,place')->name('places.favorite');
 
-Route::get('logo', function () {
-    $path = public_path('logos/logo.png');
-    return response()->file($path);
-})->name('logo');
+Route::get('/about', function () {
+    return view('about-us');
+});
 
-Route::get('locationpin', function () {
-    $path = public_path('assets/locationpin.png');
-    return response()->file($path);
-})->name('locationpin');
 
 
 require __DIR__.'/auth.php';
