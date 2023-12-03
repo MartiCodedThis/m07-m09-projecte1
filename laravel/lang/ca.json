@@ -7,6 +7,11 @@
     "Files": "Fitxers",
     "Posts": "Posts",
     "Places": "Llocs",
+    "Users": "Usuaris",
+    "File": "Arxiu",
+    "Post": "Post",
+    "Place": "Lloc",
+    "User": "Usuari",
     "Profile": "Perfil",
     "Log Out": "Tancar sessió",
 
@@ -20,17 +25,29 @@
     "Create post": "Crear post",
 
     "Return": "Tornar",
-    "Body:": "Cos:",
-    "File:": "Fitxer:",
-    "Latitude:": "Latitud:",
-    "Longitude:": "Longitud:",
     "Create": "Crear",
     "Edit": "Editar",
     "Delete": "Esborrar",
     "Reset": "Restaurar",
 
+    "File ID": "ID Arxiu",
+    "Author ID": "ID Autor",
+    "User ID": "ID Usuari",
+    "Role ID": "ID Rol",
+    "Body": "Cos",
+    "File path": "Drecera del fitxer",
+    "Latitude": "Latitud",
+    "Longitude": "Longitud",
+    "Created at": "Creat a",
+    "Updated at": "Actualitzat a",
+    "Name": "Nom",
+    "Description": "Descripció",
+    "Role": "Rol",
+    "Email": "Email",
+    "Email verified at": "Email verificat el",
+    "Password": "Contrasenya",
+
     "Like": "M'agrada",
     "Unlike": "No m'agrada",
     "Are you sure?": "N'estàs segur?"
 }
- 

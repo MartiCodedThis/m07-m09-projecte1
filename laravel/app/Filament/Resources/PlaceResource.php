@@ -33,11 +33,13 @@ class PlaceResource extends Resource
         return $form
             ->schema([
                 Components\Fieldset::make('File')
+                    ->translateLabel()
                     ->relationship('file')
                     ->saveRelationshipsWhenHidden()
                     ->schema([
                         // Declara un camp de pujada de fitxer al formulari
                         Components\FileUpload::make('filepath')
+                        ->label(__('File path'))
                         // Fa que el valor del camp sigui requerit
                         ->required()
                         // Especifica que s'ha d'emplenar amb una imatge
@@ -52,25 +54,32 @@ class PlaceResource extends Resource
                         }),
                     ]),
                 Components\Fieldset::make('Place')
+                ->translateLabel()
                 ->schema([
                     Components\Hidden::make('file_id')
-                        ->required(),
+                        ->required()
+                        ->label(__('File ID')),
                     Components\Select::make('author_id')
                         ->required()
                         ->options($authors)
-                        ->default($user->id),
+                        ->default($user->id)
+                        ->label(__('Author ID')),
                     Components\TextInput::make('name')
                         ->required()
-                        ->maxLength(255),
+                        ->maxLength(255)
+                        ->translateLabel(),
                     Components\RichEditor::make('description')
                         ->required()
-                        ->maxLength(255),
+                        ->maxLength(255)
+                        ->translateLabel(),
                     Components\TextInput::make('latitude')
                         ->required()
-                        ->numeric(),
+                        ->numeric()
+                        ->translateLabel(),
                     Components\TextInput::make('longitude')
                         ->required()
-                        ->numeric(),
+                        ->numeric()
+                        ->translateLabel(),
                 ]),
             ]);
     }
@@ -79,16 +88,23 @@ class PlaceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('file_id'),
-                Tables\Columns\TextColumn::make('author_id'),
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('description'),
-                Tables\Columns\TextColumn::make('latitude'),
-                Tables\Columns\TextColumn::make('longitude'),
+                Tables\Columns\TextColumn::make('file_id')
+                    ->label(__('File ID')),
+                Tables\Columns\TextColumn::make('author_id')
+                    ->label(__('Author ID')),
+                Tables\Columns\TextColumn::make('name')
+                    ->translateLabel(),
+                Tables\Columns\TextColumn::make('description')
+                    ->translateLabel(),
+                Tables\Columns\TextColumn::make('latitude')
+                    ->translateLabel(),
+                Tables\Columns\TextColumn::make('longitude')
+                    ->translateLabel(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
+                    ->dateTime()->translateLabel(),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime(),
+                    ->dateTime()
+                    ->translateLabel(),
             ])
             ->filters([
                 //
