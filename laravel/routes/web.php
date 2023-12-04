@@ -56,7 +56,7 @@ Route::delete('/posts/{post}/like', [PostController::class, 'like'])->name('post
 Route::post('places/{place}/favorites', [PlaceController::class, 'favorite'])->middleware('can:favorite,place')->name('places.favorite');
 Route::delete('places/{place}/favorites', [PlaceController::class, 'favorite'])->middleware('can:favorite,place')->name('places.favorite');
 
-Route::get('/about', function () {
+Route::get('about', function () {
     return view('about-us');
 });
 Route::get('/language/{locale}', [LanguageController::class, 'language'])->name('language');
