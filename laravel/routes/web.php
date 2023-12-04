@@ -9,6 +9,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\PlaceController; 
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LanguageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,7 +59,13 @@ Route::delete('places/{place}/favorites', [PlaceController::class, 'favorite'])-
 Route::get('about', function () {
     return view('about-us');
 });
-    
+Route::get('/language/{locale}', [LanguageController::class, 'language'])->name('language');
+
+Route::get('logo', function () {
+    $path = public_path('logos/logo.png');
+    return response()->file($path);
+})->name('logo');
+
 
 
 require __DIR__.'/auth.php';

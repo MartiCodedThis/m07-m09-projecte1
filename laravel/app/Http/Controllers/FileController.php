@@ -66,12 +66,12 @@ class FileController extends Controller
             \Log::debug("DB storage OK");
             // Patró PRG amb missatge d'èxit
             return redirect()->route('files.show', $file)
-                ->with('success', 'File successfully saved');
+                ->with('success', __('File successfully saved'));
         } else {
             \Log::debug("Disk storage FAILS");
             // Patró PRG amb missatge d'error
             return redirect()->route("files.create")
-                ->with('error', 'ERROR uploading file');
+                ->with('error', __('ERROR uploading file'));
         }
     }
 
@@ -87,7 +87,7 @@ class FileController extends Controller
         }
         else{
             return redirect()->route('files.index')
-                ->with('error','Fitxer inexistent');
+                ->with('error', __('File does not exist'));
         }
     }
 
@@ -102,7 +102,7 @@ class FileController extends Controller
         }
         else{
             return redirect()->route('files.index')
-                ->with('error','Fitxer inexistent');
+                ->with('error', __('File does not exist'));
         }
     }
 
@@ -143,13 +143,13 @@ class FileController extends Controller
 
             // Patró PRG amb missatge d'èxit
             return redirect()->route('files.show', $file)
-                ->with('success', 'File successfully saved');
+                ->with('success', __('File successfully saved'));
         } 
         else {
             \Log::debug("Disk storage FAILS");
             // Patró PRG amb missatge d'error
             return redirect()->route("files.edit", $file)
-                ->with('error', 'ERROR uploading file');
+                ->with('error', __('ERROR uploading file'));
         }
     }
 
@@ -166,7 +166,7 @@ class FileController extends Controller
         }   
         else{
             return redirect()->route('files.show', $file)
-                ->with('error','Fitxer inexistent');
+                ->with('error', __('File does not exist'));
         }
     }
 }

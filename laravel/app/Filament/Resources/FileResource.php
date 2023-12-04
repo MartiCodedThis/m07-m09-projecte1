@@ -27,6 +27,7 @@ class FileResource extends Resource
             ->schema([
                 // Declara un camp de pujada de fitxer al formulari
                 Forms\Components\FileUpload::make('filepath')
+                    ->label(__('File size'))
                     // Fa que el valor del camp sigui requerit
                     ->required()
                     // Especifica que s'ha d'emplenar amb una imatge
@@ -51,12 +52,16 @@ class FileResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('filepath'),
-                Tables\Columns\TextColumn::make('filesize'),
+                Tables\Columns\TextColumn::make('filepath')
+                    ->label(__('File path')),
+                Tables\Columns\TextColumn::make('filesize')
+                    ->label(__('File size')),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
+                    ->dateTime()
+                    ->translateLabel(),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime(),
+                    ->dateTime()
+                    ->translateLabel(),
             ])
             ->filters([
                 //

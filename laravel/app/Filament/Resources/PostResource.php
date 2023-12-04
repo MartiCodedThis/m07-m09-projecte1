@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use LiveWire;
 use Filament\Forms\Components;
+use Filament\Tables\Columns\TextColumn;
 
 class PostResource extends Resource
 {
@@ -33,6 +34,7 @@ class PostResource extends Resource
         return $form
             ->schema([
                 Components\Fieldset::make('File')
+                    ->translateLabel()
                     ->relationship('file')
                     ->saveRelationshipsWhenHidden()
                     ->schema([
@@ -49,23 +51,29 @@ class PostResource extends Resource
                         // Modifica el nom de l'arxiu per incloure el temps de la pujada
                         ->getUploadedFileNameForStorageUsing(function (Livewire\TemporaryUploadedFile $file): string {
                             return time() . '_' . $file->getClientOriginalName();
-                        }),
+                        })
+                        ->label(__('File path')),
                     ]),
                 Components\Fieldset::make('Post')
+                    ->translateLabel()
                     ->schema([
                         Components\Hidden::make('file_id')
-                            ->required(),
+                            ->label(__('File ID')),
                         Components\Select::make('author_id')
                             ->required()
                             ->options($authors)
-                            ->default($user->id),
+                            ->default($user->id)
+                            ->label(__('Author ID')),
                         Components\TextInput::make('body')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->translateLabel(),
                         Components\TextInput::make('latitude')
-                            ->required(),
+                            ->required()
+                            ->translateLabel(),
                         Components\TextInput::make('longitude')
-                            ->required(),
+                            ->required()
+                            ->translateLabel(),
                     ]),
                 
             ]);
@@ -75,15 +83,22 @@ class PostResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('file_id'),
-                Tables\Columns\TextColumn::make('author_id'),
-                Tables\Columns\TextColumn::make('body'),
-                Tables\Columns\TextColumn::make('latitude'),
-                Tables\Columns\TextColumn::make('longitude'),
+                Tables\Columns\TextColumn::make('file_id')
+                    ->label(__('File ID')),
+                Tables\Columns\TextColumn::make('author_id')
+                    ->label(__('Author ID')),
+                Tables\Columns\TextColumn::make('body')
+                    ->translateLabel(),
+                Tables\Columns\TextColumn::make('latitude')
+                    ->translateLabel(),
+                Tables\Columns\TextColumn::make('longitude')
+                    ->translateLabel(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
+                    ->dateTime()
+                    ->translateLabel(),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime(),
+                    ->dateTime()
+                    ->translateLabel(),
             ])
             ->filters([
                 //

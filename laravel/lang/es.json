@@ -1,0 +1,53 @@
+{
+    "File successfully saved": "Archivo guardado correctamente",
+    "ERROR uploading file": "ERROR al subir el archivo",
+    "File does not exist": "El archivo no existe",
+    "File successfully eliminated": "Archivo eliminado correctamente",
+
+    "Files": "Archivos",
+    "Posts": "Posts",
+    "Places": "Lugares",
+    "Users": "Usuarios",
+    "File": "Archivo",
+    "Post": "Post",
+    "Place": "Lugar",
+    "User": "Usuario",
+    "Profile": "Perfil",
+    "Log Out": "Cerrar sesión",
+
+    "Dashboard": "Tablero",
+    "You're logged in!": "¡Has iniciado sesión!",
+
+    "Post list": "Lista de posts",
+    "Search for posts...": "Buscar posts...",
+    "Search": "Buscar",
+    "Author:": "Autor:",
+    "Create post": "Crear post",
+
+    "Return": "Volver",
+    "Create": "Crear",
+    "Edit": "Editar",
+    "Delete": "Eliminar",
+    "Reset": "Restablecer",
+
+    "File ID": "ID Archivo",
+    "Author ID": "ID Autor",
+    "User ID": "ID Usuario",
+    "Role ID": "ID Rol",
+    "Body": "Cuerpo",
+    "File path": "Ruta del archivo",
+    "Latitude": "Latitud",
+    "Longitude": "Longitud",
+    "Created at": "Creado en",
+    "Updated at": "Actualizado en",
+    "Name": "Nombre",
+    "Description": "Descripción",
+    "Role": "Rol",
+    "Email": "Email",
+    "Email verified at": "Email verificado en",
+    "Password": "Contraseña",
+
+    "Like": "Me gusta",
+    "Unlike": "No me gusta",
+    "Are you sure?": "¿Estás seguro?"
+}
