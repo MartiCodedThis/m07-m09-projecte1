@@ -60,15 +60,17 @@ Route::prefix('assets')->group(function () {
         return response()->file($path);
     })->name('funny-mre');
 
-    Route::get('thud', function () {
-        $path = public_path('assets/audio/thud.mp3');
-        return response()->file($path);
-    })->name('thud');
+    // ABOUT AUDIOS
 
-    Route::get('oof', function () {
-        $path = public_path('assets/audio/oof.mp3');
+    Route::get('sandstorm', function () {
+        $path = public_path('assets/audio/sandstorm.mp3');
         return response()->file($path);
-    })->name('oof');
+    })->name('sandstorm');
+
+    Route::get('spiderman', function () {
+        $path = public_path('assets/audio/spiderman.mp3');
+        return response()->file($path);
+    })->name('spiderman');
 });
 
 

@@ -2,11 +2,16 @@ import defaultTheme from 'tailwindcss/defaultTheme';
 import forms from '@tailwindcss/forms';
 
 /** @type {import('tailwindcss').Config} */
+
 export default {
     content: [
+        "./index.html",
+        "./src/**/*.{js,ts,jsx,tsx}",
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
+        "./src/**/*.{html,js}",
+        "./node_modules/tw-elements/dist/plugin.cjs"
     ],
 
     theme: {
@@ -27,14 +32,11 @@ export default {
         },
     },
 
-    plugins: [forms],
+    plugins: [
+        forms
+    ],
 };
 
-module.exports = {
-    content: [
-        "./src/**/*.{html,js}",
-        "./node_modules/tw-elements/dist/plugin.cjs"
-    ],
-    plugins: [require("tw-elements/dist/js/**/*.js")],
-    darkMode: "class"
-}
+
+
+

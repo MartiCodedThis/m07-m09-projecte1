@@ -40,7 +40,7 @@
 
 <x-app-layout>
     <div class="containr flex flex-row">
-        <div class="about-mst w-48 m-4">
+        <div id="about-mst" class="about-mst w-48 m-4">
             <div class="flex flex-col">
                 <div class="flip">
                     <div class="flip-inner">
@@ -57,12 +57,10 @@
                     </div>
                 </div>          
             </div>
-            <audio id="audio-mst" >
-                <source src="{{ route('oof')}}"/>
-            </audio>
+            <audio src="{{ route('spiderman')}}" id="audio-mst"></audio>
         </div>
 
-        <div class="about-mre w-48 m-4">
+        <div id="about-mre" class="about-mre w-48 m-4">
             <div class="flex flex-col">
                 <div class="flip">
                     <div class="flip-inner">
@@ -79,35 +77,63 @@
                     </div>
                 </div>          
             </div>
-            <audio id="audio-mre">
-                <source src="{{ route('thud')}}"/>
-            </audio>
+            <audio src="{{ route('sandstorm')}}" id="audio-mre"></audio>
+        </div>  
+            
+        <!-- Trigger button to open the modal -->
+        <div
+            data-te-toggle="modal"
+            data-te-target="#exampleModal"
+            class="cursor-pointer"
+        >
+            Open Modal
         </div>
 
+        <!-- Modal structure -->
+        <div
+            data-te-modal-init
+            id="exampleModal"
+            tabindex="-1"
+            aria-labelledby="modalTitle"
+            aria-hidden="true"
+            class="hidden fixed inset-0 overflow-y-auto"
+        >
+            <!-- Modal content -->
+            <div class="flex items-center justify-center min-h-screen">
+                <!-- Your modal content goes here -->
+                <div class="bg-white p-4 rounded shadow-lg">
+                    <h2 class="text-lg font-semibold mb-2">Modal Title</h2>
+                    <p>Modal content goes here...</p>
+                    <!-- Close button or additional content -->
+                </div>
+            </div>
+        </div>
+
+    </div>   
 </x-app-layout>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
+<script defer >
+    initTE({ Modal, Ripple });
         let audiomst = document.getElementById('audio-mst')
         let audiomre = document.getElementById('audio-mre')
+        if(audiomst && audiomre){
+            let mst = document.getElementById('about-mst')
+            let mre = document.getElementById('about-mre')
+            if(mst && mre){
+                mst.addEventListener("mouseover", function(){
+                    audiomst.play()
+                })
+                mst.addEventListener("mouseout", function(){
+                    audiomst.pause()
+                })
 
-        let mst = document.getElementById('about-mst')
-        let mre = document.getElementById('about-mre')
-
-        mst.addEventListener("mouseover", function(){
-            audiomst.load()
-            audiomst.play()
-        })
-        mst.addEventListener("mouseout", function(){
-            audiomst.pause()
-        })
-
-        mre.addEventListener("mouseover", function(){
-            audiomre.play()
-        })
-        mre.addEventListener("mouseout", function(){
-            audiomre.pause()
-        })
-    })
-
+                mre.addEventListener("mouseover", function(){
+                    audiomre.play()
+                })
+                mre.addEventListener("mouseout", function(){
+                    audiomre.pause()
+                })
+            }
+        }       
+        
 </script>
