@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\File;
 use App\Models\Post;
 use App\Models\Like;
+use App\Models\Visibility;
 
 class PostController extends Controller
 {
@@ -17,13 +18,15 @@ class PostController extends Controller
     public function index()
     {
         return view("posts.index", [
-            "posts" => Post::withCount('liked')->paginate(5)
+            "posts" => Post::withCount('liked')->paginate(5),
         ]);
     }
 
     public function create()
     {
-        return view("posts.create");
+        return view("posts.create", [
+            "visibilities" => Visibility::all(),
+        ]);
     }
 
     public function store(Request $request)
@@ -39,51 +42,51 @@ class PostController extends Controller
         \Log::debug("Storing file '{$fileName}' ($fileSize)...");
  
  
-         // Pujar fitxer al disc dur
-         $uploadName = time() . '_' . $fileName;
-         $filePath = $upload->storeAs(
-             'uploads',      // Path
-             $uploadName ,   // Filename
-             'public'        // Disk
-         );
+        // Pujar fitxer al disc dur
+        $uploadName = time() . '_' . $fileName;
+        $filePath = $upload->storeAs(
+                'uploads',      // Path
+                $uploadName ,   // Filename
+                'public'        // Disk
+        );
     
-         if (\Storage::disk('public')->exists($filePath)) {
-             \Log::debug("Disk storage OK");
-             $fullPath = \Storage::disk('public')->path($filePath);
-             \Log::debug("File saved at {$fullPath}");
-             // Desar dades a BD
-             $file = File::create([
-                 'filepath' => $filePath,
-                 'filesize' => $fileSize,
-             ]);
-             $newFile = File::where('filepath', $filePath)
-                            ->where('filesize', $fileSize)
-                            ->first();
+        if (\Storage::disk('public')->exists($filePath)) {
+            \Log::debug("Disk storage OK");
+            $fullPath = \Storage::disk('public')->path($filePath);
+            \Log::debug("File saved at {$fullPath}");
+            // Desar dades a BD
+            $file = File::create([
+                'filepath' => $filePath,
+                'filesize' => $fileSize,
+            ]);
+            $newFile = File::where('filepath', $filePath)
+                ->where('filesize', $fileSize)
+                ->first();
 
-             if ($newFile) {
+            if ($newFile) {
                 $post = Post::create([
                     'body'=>$request->input('body'),
                     'file_id'=>$newFile->id,
                     'latitude'=>$request->input('latitude'),
                     'longitude'=>$request->input('longitude'),
-                    // 'visibility_id',
+                    'visibility_id'=>$request->input('visibility'),
                     'author_id'=>$request->user()->id,     
-                   ]);
-                   \Log::debug("DB storage OK");
-                   // Patró PRG amb missatge d'èxit
-                   return redirect()->route('posts.show', $post)
-                       ->with('success', __('File successfully saved'));
+                ]);
+                \Log::debug("DB storage OK");
+                // Patró PRG amb missatge d'èxit
+                    return redirect()->route('posts.show', $post)
+                    ->with('success', __('File successfully saved'));
             }else{
                 return redirect()->route("posts.create")
-               ->with('error', __('ERROR uploading file'));
+                ->with('error', __('ERROR uploading file'));
             }
-         } else {
-             \Log::debug("Disk storage FAILS");
-             // Patró PRG amb missatge d'error
-             return redirect()->route("posts.create")
-                 ->with('error', __('ERROR uploading file'));
-         }
-     }
+        } else {
+            \Log::debug("Disk storage FAILS");
+            // Patró PRG amb missatge d'error
+            return redirect()->route("posts.create")
+                ->with('error', __('ERROR uploading file'));
+        }
+    }
 
     public function show(Post $post, Request $request)
     {
@@ -103,7 +106,10 @@ class PostController extends Controller
 
     public function edit(Post $post)
     {
-        return view("posts.edit")->with('post', $post);
+        return view("posts.edit", [
+            "visibilities" => Visibility::all(),
+        ])
+        ->with('post', $post);
     }
 
     public function update(Request $request, Post $post)
@@ -116,6 +122,7 @@ class PostController extends Controller
             'body' => 'required',
             'latitude' => 'required',
             'longitude' => 'required',
+            'visibility' => 'required',
             'upload' => 'nullable|mimes:gif,jpeg,jpg,png|max:1024'
          ]);
     
@@ -155,7 +162,7 @@ class PostController extends Controller
                         'file_id'=>$newFile->id,
                         'latitude'=>$request->input('latitude'),
                         'longitude'=>$request->input('longitude'),
-                        // 'visibility_id',
+                        'visibility_id'=>$request->input('visibility'),
                         'author_id'=>$request->user()->id,     
                     ]);
                     \Log::debug("DB storage OK");

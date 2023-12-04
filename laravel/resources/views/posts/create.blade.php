@@ -27,6 +27,16 @@
         <input type="number" name="longitude" id="longitude" class="form-input py-2 px-4 block w-full leading-5 rounded-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"/>
     </div>
 
+    <!-- Campo Visibility -->
+    <div class="mb-4">
+        <label for="visibility" class="block text-gray-700 text-sm font-bold mb-2">{{__('Visibility')}}:</label>
+        <select type="select" name="visibility" id="visibility" class="form-input py-2 px-4 block w-full leading-5 rounded-md transition duration-150 ease-in-out sm:text-sm sm:leading-5">
+            @foreach($visibilities as $visibility)
+            <option value="{{ $visibility->id }}">{{ $visibility->name }}</option>
+            @endforeach
+        </select>
+    </div>
+
     <!-- Botones de acción -->
     <div class="flex space-x-4">
         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline-blue focus:border-blue-700 active:bg-blue-800">{{__('Create')}}</button>
