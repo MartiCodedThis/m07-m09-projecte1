@@ -28,8 +28,12 @@ if (form) {
            let errors = validation.errors.all()
            console.log(errors)
            // Show error messages
-           for(let inputName in errors) {          
+           for(let inputName in errors) {       
+               
                let error = errors[inputName]
+               let errormsg = document.getElementById("errormsg")
+               errormsg.innerHTML= "[ERROR] " + error
+               errormsg.classList.remove("hidden");
                console.log("[ERROR] " + error)
                // [...]
            }
