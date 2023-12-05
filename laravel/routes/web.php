@@ -59,6 +59,7 @@ Route::delete('places/{place}/favorites', [PlaceController::class, 'favorite'])-
 Route::get('about', function () {
     return view('about-us');
 });
+
 Route::get('/language/{locale}', [LanguageController::class, 'language'])->name('language');
 
 Route::get('logo', function () {

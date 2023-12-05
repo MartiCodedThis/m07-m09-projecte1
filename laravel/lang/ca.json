@@ -24,6 +24,18 @@
     "Author:": "Autor:",
     "Create post": "Crear post",
 
+    "Add location": "Afegir un lloc nou",
+    "New location": "Nou lloc",
+    "Edit location": "Editar lloc",
+    "Upload file": "Puja un fitxer",
+    "Image": "Imatge",
+    "Created":"Data de creació",
+    "Updated":"Última edició",
+    "Actions":"Accions",
+    "File successfully deleted":"Fitxer esborrat correctament",
+    "Place added to favorites":"Lloc afegit als teus preferits",
+    "Place removed from favorites":"Lloc esborrat dels preferits",
+
     "Return": "Tornar",
     "Create": "Crear",
     "Edit": "Editar",

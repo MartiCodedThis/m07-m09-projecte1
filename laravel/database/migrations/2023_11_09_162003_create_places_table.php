@@ -18,9 +18,11 @@ return new class extends Migration
             $table->bigInteger('file_id')->unsigned();
             $table->float('latitude');
             $table->float('longitude');
+            $table->unsignedBigInteger('visibility_id');
             $table->bigInteger('author_id')->unsigned();
             $table->foreign('file_id')->references('id')->on('files');
             $table->foreign('author_id')->references('id')->on('users');
+            $table->foreign('visibility_id')->references('id')->on('visibilities');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent();
         });

@@ -6,6 +6,7 @@ use App\Models\Place;
 use App\Models\File;
 use App\Models\Favorite;
 use Illuminate\Http\Request;
+use App\Models\Visibility;
 
 class PlaceController extends Controller
 {
@@ -28,7 +29,9 @@ class PlaceController extends Controller
      */
     public function create()
     {
-        return view("places.create");
+        return view("places.create",[
+            "visibilities" => Visibility::all(),
+        ]);
     }
 
     /**
@@ -73,17 +76,18 @@ class PlaceController extends Controller
                 'file_id' => $file->id,
                 'latitude' => $request->input('latitude'),
                 'longitude' => $request->input('longitude'),
+                'visibility_id'=>$request->input('visibility'),
                 'author_id' =>  $request->user()->id
             ]);
             \Log::debug("DB storage OK");
             // Patró PRG amb missatge d'èxit
             return redirect()->route('places.show', $place)
-                ->with('success', 'File successfully saved');
+                ->with('success', "{{__('File successfully saved')}}");
         } else {
             \Log::debug("Disk storage FAILS");
             // Patró PRG amb missatge d'error
             return redirect()->route("places.create")
-                ->with('error', 'ERROR uploading file');
+                ->with('error', "{{__('ERROR uploading file')}}");
         }
     }
 
@@ -109,7 +113,9 @@ class PlaceController extends Controller
      */
     public function edit(Place $place)
     {
-        return view("places.edit")->with('place', $place);
+        return view("places.edit", [
+            "visibilities" => Visibility::all(),
+        ])->with('place', $place);
     }
 
     /**
@@ -124,6 +130,7 @@ class PlaceController extends Controller
             'description' => 'required',
             'latitude' => 'numeric',
             'longitude' => 'numeric',
+            'visibility' => 'required',
             'upload' => 'required|mimes:gif,jpeg,jpg,png|max:1024'
         ]);
 
@@ -160,17 +167,18 @@ class PlaceController extends Controller
                     'file_id' => $file->id,
                     'latitude' => $request->input('latitude'),
                     'longitude' => $request->input('longitude'),
+                    'visibility_id'=>$request->input('visibility'),
                     'author_id' =>  $request->user()->id
                 ]);
                 \Log::debug("DB storage OK");
                 // Patró PRG amb missatge d'èxit
                 return redirect()->route('places.show', $place)
-                    ->with('success', 'File successfully saved');
+                    ->with('success', "{{__('File successfully saved')}}");
             } else {
                 \Log::debug("Disk storage FAILS");
                 // Patró PRG amb missatge d'error
                 return redirect()->route("places.create")
-                    ->with('error', 'ERROR uploading file');
+                    ->with('error', "{{__('ERROR uploading file')}}");
             }
         }else{
 
@@ -183,20 +191,21 @@ class PlaceController extends Controller
                     'file_id' => $file_id->id,
                     'latitude' => $request->input('latitude'),
                     'longitude' => $request->input('longitude'),
+                    'visibility_id'=>$request->input('visibility'),
                     'author_id' => $request->user()->id,
                 ]);
                 \Log::debug("DB storage OK");
                 // Patró PRG amb missatge d'èxit
                 return redirect()->route('places.show', $place)
-                    ->with('success', 'File successfully saved');
+                    ->with('success', "{{__('File successfully saved')}}");
             } else {
                 return redirect()->route("places.edit", $place)
-                    ->with('error', 'ERROR uploading file');
+                    ->with('error',  "{{__('ERROR uploading file')}}" );
             }
             \Log::debug("Disk storage FAILS");
             // Patró PRG amb missatge d'error
             return redirect()->route("places.edit", $place)
-                ->with('error', 'ERROR uploading file');
+                ->with('error', "{{__('ERROR uploading file')}}" );
         }
     }
 
@@ -210,7 +219,7 @@ class PlaceController extends Controller
         $place->delete();
         $place->file->delete();
         return redirect()->route('places.index')
-            ->with('success', 'File successfully deleted');
+            ->with('success', "{{__('File successfully eliminated)}}");
 
 
         // NO FUNCIONA CORRECTAMENT EL DESTROY, LA FUNCIÓ ACTUAL NOMÉS ESBORRA LA PLACE PERO NO EL FITXER
@@ -239,7 +248,7 @@ class PlaceController extends Controller
             $favExists->delete();
 
             return redirect()->route('places.show', $place)
-                ->with('warning', 'Lloc esborrat dels preferits');
+                ->with('warning', "{{__('Place removed from favorites')}}");
         } 
         else {
             $favorite = Favorite::create([
@@ -248,7 +257,7 @@ class PlaceController extends Controller
             ]);
 
             return redirect()->route('places.show', $place)
-                ->with('success', 'Lloc afegit als teus preferits');
+                ->with('success', "{{__('Place added to favorites')}}");
         }
     }
 }

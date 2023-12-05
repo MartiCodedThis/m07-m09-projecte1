@@ -14,17 +14,17 @@
                 <table class="w-full table-auto">
                     <thead>
                         <tr>
-                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">ID</th>
-                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">Name</th>
-                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">Description</th>
-                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">File ID</th>
-                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">Latitude</th>
-                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">Longitude</th>
-                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">Author ID</th>
-                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">Created</th>
-                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">Updated</th>
-                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">Favs</th>
-                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">Actions</th>
+                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">{{__('ID')}}</th>
+                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">{{__('Name')}}</th>
+                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">{{__('Description')}}</th>
+                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">{{__('File ID')}}</th>
+                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">{{__('Latitude')}}</th>
+                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">{{__('Longitude')}}</th>
+                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">{{__('Author ID')}}</th>
+                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">{{__('Created')}}</th>
+                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">{{__('Updated')}}</th>
+                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">{{__('Favs')}}</th>
+                            <th class="bg-gray-200 text-gray-700 py-2 px-4 text-center">{{__('Actions')}}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -41,11 +41,11 @@
                             <td class="py-2 px-4 text-center">{{ $place->favorited_count }}</td>
                             <td class="py-2 px-4 text-center">
                                 <div class="flex flex-col w-full space-y-1">
-                                        <a href="{{ route('places.edit', $place) }}" class="w-full bg-gray-400 text-white py-2 px-10 text:center rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300"> Edit </a> 
+                                        <a href="{{ route('places.edit', $place) }}" class="w-full bg-gray-400 text-white py-2 px-10 text:center rounded hover:bg-gray-500 active:outline-none active:ring active:ring-gray-300">{{__('Edit')}} </a> 
                                     <form method="POST" action="{{ route('places.destroy', $place) }}">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="w-full bg-red-500 text-white py-2 px-10 rounded hover:bg-red-600 active:outline-none active:ring active:ring-red-300">Destroy</button>
+                                        <button type="submit" class="w-full bg-red-500 text-white py-2 px-10 rounded hover:bg-red-600 active:outline-none active:ring active:ring-red-300">{{__('Delete')}}</button>
                                     </form>
                                 </div>
                             </td>

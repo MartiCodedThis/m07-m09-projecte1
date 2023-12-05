@@ -191,7 +191,7 @@ class PostController extends Controller
                 'file_id'=>$post->file->id,
                 'latitude'=>$request->input('latitude'),
                 'longitude'=>$request->input('longitude'),
-                // 'visibility_id',
+                'visibility_id'=>$request->input('visibility'),
                 'author_id'=>$request->user()->id,     
             ]);
             

@@ -74,7 +74,7 @@
                         
                         <a class="flex flex-row content-center justify-center" href="{{ route('places.create') }}">
                             <x-heroicon-s-plus class="h-8 w-8"/>
-                            <p class="mt-1">Add location</p>
+                            <p class="mt-1">{{__('Add location')}}</p>
                         </a>
                        
                     </div>
