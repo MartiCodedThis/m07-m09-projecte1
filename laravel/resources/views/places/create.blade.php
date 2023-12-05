@@ -8,9 +8,10 @@
    </x-slot>
    <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div id="error-container"></div>
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-10">
                 <h1 class="text-2xl font-semibold mb-4"> {{ __('New location') }}</h1>
-                <form method="post" action="{{ route('places.store') }}" enctype="multipart/form-data">
+                <form id="create-place-form" method="post" action="{{ route('places.store') }}" enctype="multipart/form-data">
                     @csrf
                     <label for="name">{{ __('Name') }}</label>
                     <input type="text" class="border p-2 w-full mb-4" name="name" maxlength="255"/>
