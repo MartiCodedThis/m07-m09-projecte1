@@ -36,7 +36,7 @@
         <label for="visibility" class="block text-gray-700 text-sm font-bold mb-2">{{__('Visibility')}}:</label>
         <select type="select" name="visibility" id="visibility" class="form-input py-2 px-4 block w-full leading-5 rounded-md transition duration-150 ease-in-out sm:text-sm sm:leading-5">
             @foreach($visibilities as $visibility)
-            <option value="{{ $visibility->id }}">{{ $visibility->name }}</option>
+            <option value="{{ $visibility->id }}" {{ $visibility->id == $post->visibility_id ? "selected" : "" }}>{{ $visibility->name }}</option>
             @endforeach
         </select>
     </div>

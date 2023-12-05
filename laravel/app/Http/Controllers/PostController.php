@@ -114,27 +114,24 @@ class PostController extends Controller
 
     public function update(Request $request, Post $post)
     {
-        {
-            $oldfilePath = $post->file->filepath;
-            
-            // Validar fitxer
-           $validatedData = $request->validate([
+        $oldfilePath = $post->file->filepath;
+        
+        // Validar fitxer
+        $validatedData = $request->validate([
             'body' => 'required',
             'latitude' => 'required',
             'longitude' => 'required',
             'visibility' => 'required',
             'upload' => 'nullable|mimes:gif,jpeg,jpg,png|max:1024'
-         ]);
+        ]);
     
-         if ($request->hasFile('upload')) {
-             // Obtenir dades del fitxer
-           $upload = $request->file('upload');
-           $fileName = $upload->getClientOriginalName();
-           $fileSize = $upload->getSize();
-           \Log::debug("Storing file '{$fileName}' ($fileSize)...");
+        if ($request->hasFile('upload')) {
+            // Obtenir dades del fitxer
+            $upload = $request->file('upload');
+            $fileName = $upload->getClientOriginalName();
+            $fileSize = $upload->getSize();
+            \Log::debug("Storing file '{$fileName}' ($fileSize)...");
             
-    
-    
             // Pujar fitxer al disc dur
             $uploadName = time() . '_' . $fileName;
             $filePath = $upload->storeAs(
@@ -143,7 +140,7 @@ class PostController extends Controller
                 'public'        // Disk
             );
             
-           if (\Storage::disk('public')->exists($filePath)) {
+            if (\Storage::disk('public')->exists($filePath)) {
                 \Log::debug("Disk storage OK");
                 $fullPath = \Storage::disk('public')->path($filePath);
                 \Log::debug("File saved at {$fullPath}");
@@ -152,53 +149,31 @@ class PostController extends Controller
                     'filepath' => $filePath,
                     'filesize' => $fileSize,
                 ]);
-                $newFile = File::where('filepath', $filePath)
-                                    ->where('filesize', $fileSize)
-                                    ->first();
-    
-                if ($newFile) {
-                    $post->update([
-                        'body'=>$request->input('body'),
-                        'file_id'=>$newFile->id,
-                        'latitude'=>$request->input('latitude'),
-                        'longitude'=>$request->input('longitude'),
-                        'visibility_id'=>$request->input('visibility'),
-                        'author_id'=>$request->user()->id,     
-                    ]);
-                    \Log::debug("DB storage OK");
-    
-                    \Storage::disk('public')->delete($oldfilePath);
-                    // Patró PRG amb missatge d'èxit
-                    return redirect()->route('posts.show', $post)
-                        ->with('success', __('File successfully saved'));
-                }else{
-                    return redirect()->route("posts.edit",$post)
-                ->with('error', __('ERROR uploading file'));
-                }
-    
-            }else{
-               
+                // Esborrar fitxer antic
+                \Storage::disk('public')->delete($oldfilePath);
+            } else {               
                 \Log::debug("Disk storage FAILS");
                 // Patró PRG amb missatge d'error
                 return redirect()->route("posts.edit",$post)
                     ->with('error', __('ERROR uploading file'));
             }
-            
-            
-        }else{
-            $post->update([
-                'body'=>$request->input('body'),
-                'file_id'=>$post->file->id,
-                'latitude'=>$request->input('latitude'),
-                'longitude'=>$request->input('longitude'),
-                'visibility_id'=>$request->input('visibility'),
-                'author_id'=>$request->user()->id,     
-            ]);
-            
-            return redirect()->route('posts.show', $post)
-                ->with('success', __('File successfully saved')); 
-            }
         }
+        
+        // Escenari A. No ha pujat cap fitxer
+        // Escenari B. Ha pujat un nou fitxer correctament
+        $post->update([
+            'body'=>$request->input('body'),
+            'latitude'=>$request->input('latitude'),
+            'longitude'=>$request->input('longitude'),
+            'visibility_id'=>$request->input('visibility'),
+            'author_id'=>$request->user()->id,     
+        ]);
+        
+        \Log::debug("DB storage OK");
+        
+        // Patró PRG amb missatge d'èxit
+        return redirect()->route('posts.show', $post)
+            ->with('success', __('File successfully saved'));            
     }
 
     public function destroy(Post $post)

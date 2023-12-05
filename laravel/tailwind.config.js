@@ -22,7 +22,7 @@ export default {
             colors:{
                 gm_bg1: '#1F2333',
                 gm_bg2: '#2F3542',
-                gm_textsub: '#546465',
+                gm_textsub: '#90A1A2',
                 gm_text: '#EBEBEB',
                 gm_emphasis: '#08C4B7',
                 gm_alert: '#EF4B2B',
