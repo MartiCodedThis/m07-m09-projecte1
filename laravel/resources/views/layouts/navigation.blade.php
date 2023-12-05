@@ -24,6 +24,9 @@
                     <x-nav-link :href="route('places.index')" :active="request()->routeIs('places.index')">
                         {{ __('Places') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('about')" :active="request()->routeIs('about')">
+                        {{ __('About us') }}
+                    </x-nav-link>
                 </div>
             </div>
             <!-- Settings Dropdown -->
@@ -80,14 +83,19 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
         </div> -->
+        @if (Auth::user()->can('viewAny', App\Models\File::class))
         <x-nav-link :href="route('files.index')" :active="request()->routeIs('files.index')">
             {{ __('Files') }}
         </x-nav-link>
+        @endif
         <x-nav-link :href="route('posts.index')" :active="request()->routeIs('posts.index')">
             {{ __('Posts') }}
         </x-nav-link>
         <x-nav-link :href="route('places.index')" :active="request()->routeIs('places.index')">
             {{ __('Places') }}
+        </x-nav-link>
+        <x-nav-link :href="route('about')" :active="request()->routeIs('about')">
+            {{ __('About us') }}
         </x-nav-link>
 
         <!-- Responsive Settings Options -->

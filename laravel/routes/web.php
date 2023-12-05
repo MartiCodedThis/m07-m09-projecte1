@@ -9,6 +9,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\PlaceController; 
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AboutController;
 use App\Http\Controllers\LanguageController;
 
 /*
@@ -56,9 +57,7 @@ Route::delete('/posts/{post}/like', [PostController::class, 'like'])->name('post
 Route::post('places/{place}/favorites', [PlaceController::class, 'favorite'])->middleware('can:favorite,place')->name('places.favorite');
 Route::delete('places/{place}/favorites', [PlaceController::class, 'favorite'])->middleware('can:favorite,place')->name('places.favorite');
 
-Route::get('about', function () {
-    return view('about-us');
-});
+Route::get('/about', [AboutController::class, 'index'])->name('about');
 
 Route::get('/language/{locale}', [LanguageController::class, 'language'])->name('language');
 
