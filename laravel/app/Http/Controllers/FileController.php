@@ -55,7 +55,7 @@ class FileController extends Controller
         );
    
         if (\Storage::disk('public')->exists($filePath)) {
-            \Log::debug("Disk storage OK");
+            \Log::debug("Disk storage OK (create)");
             $fullPath = \Storage::disk('public')->path($filePath);
             \Log::debug("File saved at {$fullPath}");
             // Desar dades a BD
@@ -63,7 +63,7 @@ class FileController extends Controller
                 'filepath' => $filePath,
                 'filesize' => $fileSize,
             ]);
-            \Log::debug("DB storage OK");
+            \Log::debug("DB storage OK (create)");
             // Patró PRG amb missatge d'èxit
             return redirect()->route('files.show', $file)
                 ->with('success', __('File successfully saved'));
@@ -131,7 +131,7 @@ class FileController extends Controller
         );
 
         if (\Storage::disk('public')->exists($filePath)) {
-            \Log::debug("Disk storage OK");
+            \Log::debug("Disk storage OK (update)");
             $fullPath = \Storage::disk('public')->path($filePath);
             \Log::debug("File saved at {$fullPath}");
 
@@ -139,7 +139,7 @@ class FileController extends Controller
             $file->filesize = $fileSize;
             // Desar dades a BD
             $file->save();
-            \Log::debug("DB storage OK");
+            \Log::debug("DB storage OK (update)");
 
             // Patró PRG amb missatge d'èxit
             return redirect()->route('files.show', $file)
@@ -169,4 +169,5 @@ class FileController extends Controller
                 ->with('error', __('File does not exist'));
         }
     }
+
 }
