@@ -108,11 +108,16 @@ class FileController extends Controller
             'upload' => 'required|mimes:gif,jpeg,jpg,png|max:1024'
         ]);
 
+        $tempFile = File::find($id);
         // Obtenir dades del fitxer
         $upload = $request->file('upload');
 
         $fileSize = $upload->getSize();
-        $file = new File();
+        $file = new File([
+            'name' => $request->name,
+            'filepath' => $tempFile->filepath,
+            'filesize' => $fileSize
+        ]);
         $ok = $file->diskSave($upload);
 
         if ($ok) {
