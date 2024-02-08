@@ -108,40 +108,52 @@ class FileController extends Controller
             'upload' => 'required|mimes:gif,jpeg,jpg,png|max:1024'
         ]);
 
-        $tempFile = File::find($id);
-        // Obtenir dades del fitxer
-        $upload = $request->file('upload');
-        $fullPath = $tempFile->filepath;
+        if($validatedData){
+            $tempFile = File::find($id);
+            if($tempFile){
+                // Obtenir dades del fitxer
+                $upload = $request->file('upload');
+                $fullPath = $tempFile->filepath;
 
-        $fileSize = $upload->getSize();
-        $file = new File([
-            'name' => $request->name,
-            'filepath' => $tempFile->filepath,
-            'filesize' => $fileSize
-        ]);
-        $ok = $file->diskSave($upload);
+                $fileSize = $upload->getSize();
+                $file = new File([
+                    'filepath' => $tempFile->filepath,
+                    'filesize' => $fileSize
+                ]);
+                $ok = $file->diskSave($upload);
 
-        if ($ok) {
-            \Log::debug("File saved at {$fullPath}");
-            var_dump($fullPath);
-            $file->filepath = $fullPath;
-            $file->filesize = $fileSize;
-            // Desar dades a BD
-            $file->save();
-            \Log::debug("DB storage OK");
+                if ($ok) {
+                    \Log::debug("File saved at {$fullPath}");
+                    // Desar dades a BD
+                    $file->save();
+                    \Log::debug("DB storage OK");
 
-            // Patró PRG amb missatge d'èxit
-            return response()->json([
-                'success'=>true,
-                'data'=>$file
-            ], 200);
-        } 
+                    // Patró PRG amb missatge d'èxit
+                    return response()->json([
+                        'success'=>true,
+                        'data'=>$file
+                    ], 200);
+                } 
+                else {
+                    return response()->json([
+                        'success'=>false,
+                        'message'=>'Error saving file'
+                    ], 500);
+                }
+            }
+            else{
+                return response()->json([
+                    'success'=>false,
+                    'message'=>'File not found'
+                ], 404);
+            }
+        }
         else {
             return response()->json([
                 'success'=>false,
-                'message'=>'Error getting file'
-            ], 500);
-        }
+                'message'=>'Invalid format'
+            ], 421);
+        }        
     }
 
     /**
@@ -149,6 +161,30 @@ class FileController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $file = File::find($id);
+        if($file){
+            $stored = \Storage::disk('public')->get($file->filepath);
+            if($stored){
+                \Storage::disk('public')->delete($file->filepath);
+                $file->delete();
+                return response()->json([
+                    'success'=>true,
+                    'data'=>$file
+                ], 200);
+            }   
+            else{
+                return response()->json([
+                    'success'=>false,
+                    'message'=>'File doesnt exist'
+                ], 500);
+            }
+        }
+        else{
+            return response()->json([
+                'success'=>false,
+                'message'=>'File not found'
+            ], 404);
+        }
+        
     }
 }

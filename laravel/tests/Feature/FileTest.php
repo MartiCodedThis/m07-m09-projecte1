@@ -132,7 +132,8 @@ class FileTest extends TestCase
    public function test_file_update_notfound()
    {
        $id = "not_exists";
-       $response = $this->putJson("/api/files/{$id}", []);
+       $fakeFile = UploadedFile::fake()->create('test-file.jpg');
+       $response = $this->putJson("/api/files/{$id}", ['upload'=> $fakeFile]);
        $this->_test_notfound($response);
    }
 
