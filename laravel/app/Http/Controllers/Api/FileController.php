@@ -111,6 +111,7 @@ class FileController extends Controller
         $tempFile = File::find($id);
         // Obtenir dades del fitxer
         $upload = $request->file('upload');
+        $fullPath = $tempFile->filepath;
 
         $fileSize = $upload->getSize();
         $file = new File([
@@ -121,7 +122,6 @@ class FileController extends Controller
         $ok = $file->diskSave($upload);
 
         if ($ok) {
-            $fullPath = \Storage::disk('public')->path($id);
             \Log::debug("File saved at {$fullPath}");
             var_dump($fullPath);
             $file->filepath = $fullPath;

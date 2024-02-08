@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('likes', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')
                   ->onUpdate('cascade')->onDelete('cascade');
@@ -20,10 +21,7 @@ return new class extends Migration
                   ->onUpdate('cascade')->onDelete('cascade');
             // Eloquent does not support composite PK :-(
             // $table->primary(['column1', 'column2']);
-        });
-        // Eloquent compatibility workaround :-)
-        Schema::table('likes', function (Blueprint $table) {
-            $table->id()->first();
+            // Eloquent compatibility workaround :-)
             $table->unique(['user_id', 'post_id']);
         });
  
