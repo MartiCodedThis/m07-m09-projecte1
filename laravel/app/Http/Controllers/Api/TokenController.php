@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+
 class TokenController extends Controller{
     public function user(Request $request)
     {
@@ -46,5 +47,42 @@ class TokenController extends Controller{
             ], 401);
         }
     }
+
+    public function logout(Request $request){
+        $request->user()->currentAccessToken()->delete();
+    
+        return response()->json([
+            "success" => true,
+            "message" => "User logged out successfully"
+        ], 200);
+        
+       }
+    
+       public function register(Request $request){
+            $data = $request->validate([
+                'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required|string|min:8',
+            ]);
+    
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => bcrypt($data['password']),
+                'role_id' => 1
+            ]);
+    
+            // Generate token for the registered user
+            $token = $user->createToken("authToken")->plainTextToken;
+    
+            return response()->json([
+                "success" => true,
+                "user" => $user,
+                "authToken" => $token,
+                "tokenType" => "Bearer"
+            ], 200);
+    
+        
+       }
 
 }
