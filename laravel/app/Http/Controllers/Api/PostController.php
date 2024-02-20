@@ -228,10 +228,8 @@ class PostController extends Controller
     public function like(Request $request, $post_id)
     {
         $post = Post::find( $post_id );
-        $this->authorize('create', $post);
-
+        // $this->authorize('create', $post);
         $user_id = $request->user()->id;
-        $post_id = $post->id;
 
         $liked = Like::where('user_id', $user_id)
             ->where('post_id', $post_id)
@@ -245,8 +243,9 @@ class PostController extends Controller
 
                 return response()->json([
                     'success'=>true,
+                    'data'=>$liked,
                     'message'=>'deleted'
-                ]);
+                ],200);
             } catch (\Exception $e) {
                 \Log::debug($e->getMessage()); // Display any deletion error
             }
@@ -260,7 +259,7 @@ class PostController extends Controller
         return response()->json([
             'success'=>true,
             'data'=>$like
-        ]);
+        ],200);
     }
 
     public function update_workaround(Request $request, $id)

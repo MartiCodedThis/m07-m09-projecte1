@@ -213,6 +213,26 @@ class PostsTest extends TestCase
         ]);
         $this->_test_notfound($response);
     }
+       /**
+    * @depends test_post_create
+    */
+    public function test_post_like(object $post){
+        Sanctum::actingAs(self::$testUser);
+        $response = $this->postJson("/api/posts/{$post->id}/like");
+        $this->_test_ok($response);
+    }
+    /**
+    * @depends test_post_create
+    */
+    public function test_post_unlike(object $post){
+        Sanctum::actingAs(self::$testUser);
+        $response = $this->deleteJson("/api/posts/{$post->id}/like");
+        $this->_test_ok($response);
+        $response->assertJson([
+            "message" => "deleted",
+        ]);
+    }
+    
     /**
     * @depends test_post_create
     */
@@ -224,22 +244,7 @@ class PostsTest extends TestCase
         // Check OK response
         $this->_test_ok($response);
     }
-    /**
-    * @depends test_post_create
-    */
-    protected function test_post_like(object $post){
-        Sanctum::actingAs(self::$testUser);
-        $response = $this->postJson("/api/posts/{$post->id}/likes");
-        $this->_test_ok($response);
-    }
-    protected function test_post_unlike(object $post){
-        Sanctum::actingAs(self::$testUser);
-        $response = $this->deleteJson("/api/posts/{$post->id}/likes");
-        $this->_test_ok($response);
-        $response->assertJson([
-            "message" => "deleted",
-        ]);
-    }
+ 
 
     protected function _test_ok($response, $status = 200)
     {
