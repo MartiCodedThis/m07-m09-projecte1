@@ -50,7 +50,7 @@ class FileController extends Controller
         // Pujar fitxer al disc dur
         $uploadName = time() . '_' . $fileName;
         $filePath = $upload->storeAs(
-            'uploads',      // Path
+            'upload',      // Path
             $uploadName ,   // Filename
             'public'        // Disk
         );

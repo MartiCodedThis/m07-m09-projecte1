@@ -12,7 +12,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $data = Post::withCount('liked')->orderBy('created_at','desc')->paginate(10);
+        $data = Post::all();
         if($data){
             return response()->json([
                 'success'=> True,
@@ -103,96 +103,106 @@ class PostController extends Controller
         
     }
 
-    public function show(Post $post, Request $request)
+    public function show($post_id)
     {
-        $user_id = $request->user()->id;
-        $post_id = $post->id;
-        $post->loadCount('liked');
-    
-        $liked = Like::where('user_id', $user_id)
-                 ->where('post_id', $post_id)
-                 ->exists();
+        $post = Post::find( $post_id );
+        if( $post ){
+            $post->loadCount('liked');
 
-        return response()->json([
-            'success'=>true,
-            'data' => $post
-        ]);
-    }
-
-    public function update(Request $request, Post $post)
-    {
-        $oldfilePath = $post->file->filepath;
-        
-        // Validar fitxer
-        $validatedData = $request->validate([
-            'body' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required',
-            'visibility' => 'required',
-            'upload' => 'nullable|mimes:gif,jpeg,jpg,png|max:1024'
-        ]);
-        if($validatedData){
-            if ($request->hasFile('upload')) {
-                // Obtenir dades del fitxer
-                $upload = $request->file('upload');
-                $fileName = $upload->getClientOriginalName();
-                $fileSize = $upload->getSize();
-                \Log::debug("Storing file '{$fileName}' ($fileSize)...");
-                
-                // Pujar fitxer al disc dur
-                $uploadName = time() . '_' . $fileName;
-                $filePath = $upload->storeAs(
-                    'uploads',      // Path
-                    $uploadName ,   // Filename
-                    'public'        // Disk
-                );
-                
-                if (\Storage::disk('public')->exists($filePath)) {
-                    \Log::debug("Disk storage OK");
-                    $fullPath = \Storage::disk('public')->path($filePath);
-                    \Log::debug("File saved at {$fullPath}");
-                    // Desar dades a BD
-                    $post->file->update([
-                        'filepath' => $filePath,
-                        'filesize' => $fileSize,
-                    ]);
-                    // Esborrar fitxer antic
-                    \Storage::disk('public')->delete($oldfilePath);
-                } else {               
-                    \Log::debug("Disk storage FAILS");
-                    // Patró PRG amb missatge d'error
-                    return response()->json([
-                        "success"=>false,
-                        "message"=> "Disk storage error"
-                    ],500);
-                }
-            }
-            
-            // Escenari A. No ha pujat cap fitxer
-            // Escenari B. Ha pujat un nou fitxer correctament
-            $post->update([
-                'body'=>$request->input('body'),
-                'latitude'=>$request->input('latitude'),
-                'longitude'=>$request->input('longitude'),
-                'visibility_id'=>$request->input('visibility'),
-                'author_id'=>$request->user()->id,     
-            ]);
-            
-            \Log::debug("DB storage OK");
-            
-            // Patró PRG amb missatge d'èxit
             return response()->json([
                 'success'=>true,
-                'data'=>$post
-            ]);
+                'data' => $post
+            ],200);
         }
         else{
             return response()->json([
                 'success'=>false,
-                'message'=>'Missing required fields'
-            ], 421);
+                'message'=> 'Couldnt find the specified post'
+            ],404);
         }
-                   
+    }
+
+    public function update(Request $request, string $id)
+    {   
+        $post = Post::find( $id );
+        if( $post ){
+            $oldfilePath = $post->file->filepath;
+                // Validar fitxer
+            $validatedData = $request->validate([
+                'body' => 'required',
+                'latitude' => 'required',
+                'longitude' => 'required',
+                'visibility' => 'required',
+                'upload' => 'nullable|mimes:gif,jpeg,jpg,png|max:1024'
+            ]);
+            if($validatedData){
+                if ($request->hasFile('upload')) {
+                    // Obtenir dades del fitxer
+                    $upload = $request->file('upload');
+                    $fileName = $upload->getClientOriginalName();
+                    $fileSize = $upload->getSize();
+                    \Log::debug("Storing file '{$fileName}' ($fileSize)...");
+                    
+                    // Pujar fitxer al disc dur
+                    $uploadName = time() . '_' . $fileName;
+                    $filePath = $upload->storeAs(
+                        'upload',      // Path
+                        $uploadName ,   // Filename
+                        'public'        // Disk
+                    );
+                    
+                    if (\Storage::disk('public')->exists($filePath)) {
+                        \Log::debug("Disk storage OK");
+                        $fullPath = \Storage::disk('public')->path($filePath);
+                        \Log::debug("File saved at {$fullPath}");
+                        // Desar dades a BD
+                        $post->file->update([
+                            'filepath' => $filePath,
+                            'filesize' => $fileSize,
+                        ]);
+                        // Esborrar fitxer antic
+                        \Storage::disk('public')->delete($oldfilePath);
+                    } else {               
+                        \Log::debug("Disk storage FAILS");
+                        // Patró PRG amb missatge d'error
+                        return response()->json([
+                            "success"=>false,
+                            "message"=> "Disk storage error"
+                        ],500);
+                    }
+                }
+                
+                // Escenari A. No ha pujat cap fitxer
+                // Escenari B. Ha pujat un nou fitxer correctament
+                $post->update([
+                    'body'=>$request->input('body'),
+                    'latitude'=>$request->input('latitude'),
+                    'longitude'=>$request->input('longitude'),
+                    'visibility_id'=>$request->input('visibility'),
+                    'author_id'=>$request->user()->id,     
+                ]);
+                
+                \Log::debug("DB storage OK");
+                
+                // Patró PRG amb missatge d'èxit
+                return response()->json([
+                    'success'=>true,
+                    'data'=>$post
+                ], 201);
+                }
+                else{
+                    return response()->json([
+                        'success'=>false,
+                        'message'=>'Missing required fields'
+                    ], 421);
+                }
+            }
+        else{
+            return response()->json([
+                'success'=>false,
+                'message'=>'File not found'
+            ], 404);
+        }                   
     }
 
     public function destroy(Post $post)
@@ -213,5 +223,48 @@ class PostController extends Controller
                 'message'=> 'Wrong filepath'
             ], 500);
         }        
+    }
+
+    public function like(Request $request, $post_id)
+    {
+        $post = Post::find( $post_id );
+        $this->authorize('create', $post);
+
+        $user_id = $request->user()->id;
+        $post_id = $post->id;
+
+        $liked = Like::where('user_id', $user_id)
+            ->where('post_id', $post_id)
+            ->first();
+
+        if ($liked) {
+            \Log::debug("Delete like");
+            try{
+                $rm = $liked->delete();
+                \Log::debug($rm ? "Deleted!" : "Not deleted :-(");
+
+                return response()->json([
+                    'success'=>true,
+                    'message'=>'deleted'
+                ]);
+            } catch (\Exception $e) {
+                \Log::debug($e->getMessage()); // Display any deletion error
+            }
+        }else{
+            \Log::debug("Create like");
+            $like = Like::create([
+                'user_id' => $user_id,
+                'post_id' => $post_id
+            ]);            
+        }
+        return response()->json([
+            'success'=>true,
+            'data'=>$like
+        ]);
+    }
+
+    public function update_workaround(Request $request, $id)
+    {
+        return $this->update($request, $id);
     }
 }

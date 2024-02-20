@@ -20,6 +20,10 @@ Route::apiResource('files', FileController::class);
 Route::apiResource('posts', PostController::class);
 
 Route::post('files/{file}', [FileController::class, 'update_workaround']);
+Route::post('posts/{post}', [PostController::class, 'update_workaround']);
+
+Route::post('posts/{post}/like', [PostController::class, 'like']);
+Route::delete('posts/{post}/like', [PostController::class, 'like']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
