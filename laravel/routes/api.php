@@ -28,8 +28,8 @@ Route::post('places/{place}', [PlaceController::class, 'update_workaround']);
 Route::post('posts/{post}/like', [PostController::class, 'like']);
 Route::delete('posts/{post}/like', [PostController::class, 'like']);
 
-Route::post('posts/{post}/favorites', [PlaceController::class, 'favorite']);
-Route::delete('posts/{post}/favorites', [PlaceController::class, 'favorite']);
+Route::post('places/{place}/favorites', [PlaceController::class, 'favorite']);
+Route::delete('places/{place}/favorites', [PlaceController::class, 'favorite']);
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
