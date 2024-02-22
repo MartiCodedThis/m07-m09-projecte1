@@ -56,13 +56,13 @@ class CommentsTest extends TestCase
         $jsonResponse = $response->json();
         $filePath = $jsonResponse["filepath"];
         $post = Post::create([
-        'body'=>'temporal test post',
-        'file_id'=>$filePath,
-        'latitude'=>'13',
-        'longitude'=>'12',
-        'visibility_id'=>1,
-        'author_id'=>$user_id,     
-    ]);
+            'body'=>'temporal test post',
+            'file_id'=>$filePath,
+            'latitude'=>'13',
+            'longitude'=>'12',
+            'visibility_id'=>1,
+            'author_id'=>$user_id,     
+        ]);
        // List all files using API web service
        $response = $this->postJson("/api/posts/{$post->id}/comments".[
         'body'=> 'test comment',

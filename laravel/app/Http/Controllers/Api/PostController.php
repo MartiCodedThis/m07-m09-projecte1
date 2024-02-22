@@ -73,7 +73,7 @@ class PostController extends Controller
                         'latitude'=>$request->input('latitude'),
                         'longitude'=>$request->input('longitude'),
                         'visibility_id'=>1,
-                        'author_id'=>1,     
+                        'author_id'=>$request->user()->id,     
                     ]);
                     \Log::debug("DB storage OK");
                     // Patró PRG amb missatge d'èxit
@@ -244,9 +244,31 @@ class PostController extends Controller
         $liked = Like::where('user_id', $user_id)
             ->where('post_id', $post_id)
             ->first();
-
-        if ($liked) {
+        if($request->method() == 'POST'){
+            if($liked){
+                return response()->json([
+                    'success'=>false,
+                    'message'=>'User already likes the post'
+                ], 500);
+            }
+            \Log::debug("Create like");
+            $like = Like::create([
+                'user_id' => $user_id,
+                'post_id' => $post_id
+            ]);   
+            return response()->json([
+                'success'=>true,
+                'data'=>$like
+            ],200);
+        }
+        elseif($request->method() == 'DELETE'){
             \Log::debug("Delete like");
+            if(!$liked){
+                return response()->json([
+                    'success'=>false,
+                    'message'=>'User didnt like the post in the first place'
+                ], 500);
+            }
             try{
                 $rm = $liked->delete();
                 \Log::debug($rm ? "Deleted!" : "Not deleted :-(");
@@ -259,17 +281,14 @@ class PostController extends Controller
             } catch (\Exception $e) {
                 \Log::debug($e->getMessage()); // Display any deletion error
             }
-        }else{
-            \Log::debug("Create like");
-            $like = Like::create([
-                'user_id' => $user_id,
-                'post_id' => $post_id
-            ]);            
         }
-        return response()->json([
-            'success'=>true,
-            'data'=>$like
-        ],200);
+        else{
+            return response()->json([
+                'success'=>false,
+                'message'=> 'Bad request'
+            ], 401);
+        }
+        
     }
 
     public function update_workaround(Request $request, $id)

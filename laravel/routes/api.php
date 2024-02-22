@@ -19,16 +19,16 @@ use App\Http\Controllers\Api\CommentController;
 |
 */
 Route::apiResource('files', FileController::class);
-Route::apiResource('posts', PostController::class);
-Route::apiResource('places', PlaceController::class);
+Route::apiResource('posts', PostController::class)->middleware('auth:sanctum');
+Route::apiResource('places', PlaceController::class)->middleware('auth:sanctum');
 Route::apiResource('posts.comments', CommentController::class);
 
 Route::post('files/{file}', [FileController::class, 'update_workaround']);
 Route::post('posts/{post}', [PostController::class, 'update_workaround']);
 Route::post('places/{place}', [PlaceController::class, 'update_workaround']);
 
-Route::post('posts/{post}/like', [PostController::class, 'like']);
-Route::delete('posts/{post}/like', [PostController::class, 'like']);
+Route::post('posts/{post}/like', [PostController::class, 'like'])->middleware('auth:sanctum');
+Route::delete('posts/{post}/like', [PostController::class, 'like'])->middleware('auth:sanctum');
 
 Route::post('posts/{post}/favorites', [PlaceController::class, 'favorite']);
 Route::delete('posts/{post}/favorites', [PlaceController::class, 'favorite']);
