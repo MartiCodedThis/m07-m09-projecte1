@@ -122,7 +122,7 @@ class PlaceController extends Controller
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'Couldnt find the specified post'
+                'message' => 'Couldnt find the specified place'
             ], 404);
         }
     }
@@ -201,7 +201,7 @@ class PlaceController extends Controller
         } else {
             return response()->json([
                 'success' => False,
-                'message' => 'Place were found'
+                'message' => 'Place was not found'
             ], 404);
         }
     }
