@@ -47,12 +47,17 @@ class CommentsTest extends TestCase
 
    public function test_comment_create() : object
    {
-       Sanctum::actingAs(self::$testUser);
-       $user_id = User::with('name', self::$testUser->name)->first()->id;
-       $upload = UploadedFile::fake()->image('avatar.png')->size(500);
-       $post = Post::create([
+        Sanctum::actingAs(self::$testUser);
+        $user_id = self::$testUser->id;
+        $upload = UploadedFile::fake()->image('avatar.png')->size(500);
+        $response = $this->postJson("/api/files", [
+            "upload" => $upload,
+        ]);
+        $jsonResponse = $response->json();
+        $filePath = $jsonResponse["filepath"];
+        $post = Post::create([
         'body'=>'temporal test post',
-        'upload'=>$upload,
+        'file_id'=>$filePath,
         'latitude'=>'13',
         'longitude'=>'12',
         'visibility_id'=>1,

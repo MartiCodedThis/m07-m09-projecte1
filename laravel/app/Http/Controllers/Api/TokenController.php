@@ -78,6 +78,8 @@ class TokenController extends Controller{
             return response()->json([
                 "success" => true,
                 "user" => $user,
+                "username"=> $data["name"],
+                "email"=> $data["email"],
                 "authToken" => $token,
                 "tokenType" => "Bearer"
             ], 200);

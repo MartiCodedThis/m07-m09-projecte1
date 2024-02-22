@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\File;
 use App\Models\Post;
 use App\Models\Like;
+use App\Models\User;
 use App\Models\Visibility;
 class PostController extends Controller
 {
@@ -29,6 +30,7 @@ class PostController extends Controller
     }
     public function store(Request $request)
     {
+
         $validatedData = $request->validate([
             'upload' => 'required|mimes:gif,jpeg,jpg,png|max:1024',
             'body' => 'required',
@@ -71,7 +73,7 @@ class PostController extends Controller
                         'latitude'=>$request->input('latitude'),
                         'longitude'=>$request->input('longitude'),
                         'visibility_id'=>1,
-                        'author_id'=>$request->user()->id,     
+                        'author_id'=>1,     
                     ]);
                     \Log::debug("DB storage OK");
                     // Patró PRG amb missatge d'èxit
@@ -125,13 +127,7 @@ class PostController extends Controller
     public function update(Request $request, string $id)
     {   
         $post = Post::find( $id );
-        $user_id = $request->user()->id;
-        if ($post->author_id != $user_id) {
-            return response()->json([
-                'success'=>false,
-                'message'=> 'User not authorized to edit this post'
-            ], 403);
-        }
+        
         if( $post ){
             $oldfilePath = $post->file->filepath;
                 // Validar fitxer
@@ -185,7 +181,7 @@ class PostController extends Controller
                     'body'=>$request->input('body'),
                     'latitude'=>$request->input('latitude'),
                     'longitude'=>$request->input('longitude'),
-                    'visibility_id'=>$request->input('visibility'),
+                    'visibility_id'=>1,
                     'author_id'=>$request->user()->id,     
                 ]);
                 
@@ -212,24 +208,33 @@ class PostController extends Controller
         }                   
     }
 
-    public function destroy(Post $post)
+    public function destroy($post_id)
     {
-        $filePath = $post->file->filepath;
-        if($filePath){
-            \Storage::disk('public')->delete($filePath);
-            $post->delete();
-            $post->file->delete();
-            return response()->json([
-                'success'=>true,
-                'data'=>$post
-            ]);
+        $post = Post::find($post_id);
+        if($post){
+            $filePath = $post->file->filepath;
+            if($filePath){
+                \Storage::disk('public')->delete($filePath);
+                $post->delete();
+                $post->file->delete();
+                return response()->json([
+                    'success'=>true,
+                    'data'=>$post
+                ]);
+            }
+            else{
+                return response()->json([
+                    'success'=>false,
+                    'message'=> 'Wrong filepath'
+                ], 500);
+            }   
         }
         else{
             return response()->json([
                 'success'=>false,
-                'message'=> 'Wrong filepath'
-            ], 500);
-        }        
+                'message'=> 'Not found'
+            ],404);
+    }        
     }
 
     public function like(Request $request, $post_id)

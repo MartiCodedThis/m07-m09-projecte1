@@ -26,14 +26,14 @@ class CommentController extends Controller
     public function store(Request $request, $post_id){
         $validatedData = $request->validate([
             'post_id' => 'required',
-            'author_id' => 'required',
+            'user_id' => 'required',
             'body'=> 'required'
          ]);
         if($validatedData){
             $comment = Comment::create([
                 'body'=>$request->input('body'),
                 'post_id'=>$post_id,
-                'author_id'=>$request->user()->id, 
+                'user_id'=>$request->user()->id, 
             ]);
             return response ()->json([
                 'success'=> true,
