@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\FileController;
 use App\Http\Controllers\Api\TokenController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\PlaceController;
+use App\Http\Controllers\Api\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,7 @@ use App\Http\Controllers\Api\PlaceController;
 Route::apiResource('files', FileController::class);
 Route::apiResource('posts', PostController::class);
 Route::apiResource('places', PlaceController::class);
+Route::apiResource('posts.comments', CommentController::class);
 
 Route::post('files/{file}', [FileController::class, 'update_workaround']);
 Route::post('posts/{post}', [PostController::class, 'update_workaround']);
