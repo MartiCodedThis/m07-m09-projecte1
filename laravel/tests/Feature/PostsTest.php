@@ -6,7 +6,6 @@ namespace Tests\Feature;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
-use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\UploadedFile;
 use Laravel\Sanctum\Sanctum;
@@ -232,7 +231,7 @@ class PostsTest extends TestCase
             "message" => "deleted",
         ]);
     }
-    
+
     /**
     * @depends test_post_create
     */
@@ -244,6 +243,17 @@ class PostsTest extends TestCase
         // Check OK response
         $this->_test_ok($response);
     }
+
+    public function test_myresource_last()
+   {
+       // Eliminem l'usuari al darrer test
+       self::$testUser->delete();
+       // Comprovem que s'ha eliminat
+       $this->assertDatabaseMissing('users', [
+           'email' => self::$testUserData['email'],
+       ]);
+   }
+
  
 
     protected function _test_ok($response, $status = 200)

@@ -71,7 +71,7 @@ class PostController extends Controller
                         'latitude'=>$request->input('latitude'),
                         'longitude'=>$request->input('longitude'),
                         'visibility_id'=>1,
-                        'author_id'=>1,     
+                        'author_id'=>$request->user()->id,     
                     ]);
                     \Log::debug("DB storage OK");
                     // Patró PRG amb missatge d'èxit
@@ -125,6 +125,13 @@ class PostController extends Controller
     public function update(Request $request, string $id)
     {   
         $post = Post::find( $id );
+        $user_id = $request->user()->id;
+        if ($post->author_id != $user_id) {
+            return response()->json([
+                'success'=>false,
+                'message'=> 'User not authorized to edit this post'
+            ], 403);
+        }
         if( $post ){
             $oldfilePath = $post->file->filepath;
                 // Validar fitxer
@@ -227,8 +234,6 @@ class PostController extends Controller
 
     public function like(Request $request, $post_id)
     {
-        $post = Post::find( $post_id );
-        // $this->authorize('create', $post);
         $user_id = $request->user()->id;
 
         $liked = Like::where('user_id', $user_id)
