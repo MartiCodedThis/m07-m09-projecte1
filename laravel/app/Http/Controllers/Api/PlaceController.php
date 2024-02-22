@@ -209,59 +209,88 @@ class PlaceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Place $place)
+    public function destroy($place_id)
     {
-        $filepath = $place->file->filepath;
-        if ($filepath) {
-            \Storage::disk('public')->delete($filepath);
-            $place->delete();
-            $place->file->delete();
-            return response()->json([
-                'success' => true,
-                'data' => $place
-            ]);
-        } else {
-            return response()->json([
-                'success' => false,
-                'message' => 'Wrong filepath'
-            ], 500);
+        $place = Place::find($place_id);
+        if($place){
+            $filePath = $place->file->filepath;
+            if($filePath){
+                \Storage::disk('public')->delete($filePath);
+                $place->delete();
+                $place->file->delete();
+                return response()->json([
+                    'success'=>true,
+                    'data'=>$place
+                ]);
+            }
+            else{
+                return response()->json([
+                    'success'=>false,
+                    'message'=> 'Wrong filepath'
+                ], 500);
+            }   
         }
+        else{
+            return response()->json([
+                'success'=>false,
+                'message'=> 'Not found'
+            ],404);
+        }        
     }
 
-    public function favorite(Request $request, Place $place)
+    public function favorite(Request $request, $place_id)
     {
         $user_id = $request->user()->id;
-        $place_id = $place->id;
 
-        $favExists = Favorite::where('user_id', $user_id)
+        $favorited = Favorite::where('user_id', $user_id)
             ->where('place_id', $place_id)
             ->first();
-
-        if ($favExists) {
-            \Log::debug('Removing place from favorites');
-            try {
-                $rm = $favExists->delete();
-                \Log::debug($rm ? "Deleted!" : "Not deleted :-(");
+        if($request->method() == 'POST'){
+            if($favorited){
                 return response()->json([
-                    'success' => true,
-                    'data' => $favExists,
-                    'message' => 'deleted'
-                ], 200);
-            } catch (\Exception $e) {
-                \Log::debug($e->getMessage());
+                    'success'=>false,
+                    'message'=>'User already likes the place'
+                ], 500);
             }
-        } else {
-            \Log::debug('Adding place from favorites');
-            $favorite = Favorite::create([
+            \Log::debug("Create like");
+            $like = Like::create([
                 'user_id' => $user_id,
                 'place_id' => $place_id
-            ]);
+            ]);   
+            return response()->json([
+                'success'=>true,
+                'data'=>$like
+            ],200);
         }
-        return response()->json([
-            'success' => true,
-            'data' => $favorite
-        ], 200);
+        elseif($request->method() == 'DELETE'){
+            \Log::debug("Delete like");
+            if(!$favorited){
+                return response()->json([
+                    'success'=>false,
+                    'message'=>'User didnt like the place in the first place'
+                ], 500);
+            }
+            try{
+                $rm = $favorited->delete();
+                \Log::debug($rm ? "Deleted!" : "Not deleted :-(");
+
+                return response()->json([
+                    'success'=>true,
+                    'data'=>$favorited,
+                    'message'=>'deleted'
+                ],200);
+            } catch (\Exception $e) {
+                \Log::debug($e->getMessage()); // Display any deletion error
+            }
+        }
+        else{
+            return response()->json([
+                'success'=>false,
+                'message'=> 'Bad request'
+            ], 401);
+        }
     }
+
     public function update_workaround(Request $request, $id)
     {
         return $this->update($request, $id);
