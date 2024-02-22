@@ -67,9 +67,11 @@ class placesTest extends TestCase
         // Upload fake file using API web service
         $response = $this->postJson("/api/places", [
             "upload" => $upload,
-            'body' => 'this is a test place',
+            'name' => 'Test',
+            'description' => 'Test place',
             'latitude' => 13,
-            'longitude' => 12
+            'longitude' => 12,
+            'visibility' => 1
         ]);
         // Check OK response
         $this->_test_ok($response, 201);
@@ -81,8 +83,12 @@ class placesTest extends TestCase
             fn($id) => !empty($id)
         );
         $response->assertJsonPath(
-            "data.body",
-            fn($body) => !empty($body)
+            "data.name",
+            fn($name) => !empty($name)
+        );
+        $response->assertJsonPath(
+            "data.description",
+            fn($description) => !empty($description)
         );
         $response->assertJsonPath(
             "data.longitude",
@@ -107,9 +113,11 @@ class placesTest extends TestCase
         // Upload fake file using API web service
         $response = $this->postJson("/api/files", [
             "upload" => $upload,
-            'body' => 'this is a test place',
+            'name' => 'Test',
+            'description' => 'Test place',
             'latitude' => 13,
-            'longitude' => 12
+            'longitude' => 12,
+            'visibility' => 1
         ]);
         // Check ERROR response
         $this->_test_error($response);
@@ -132,8 +140,12 @@ class placesTest extends TestCase
             fn($id) => !empty($id)
         );
         $response->assertJsonPath(
-            "data.body",
-            fn($body) => !empty($body)
+            "data.name",
+            fn($name) => !empty($name)
+        );
+        $response->assertJsonPath(
+            "data.description",
+            fn($description) => !empty($description)
         );
         $response->assertJsonPath(
             "data.longitude",
@@ -167,10 +179,11 @@ class placesTest extends TestCase
         // Upload fake file using API web service
         $response = $this->postJson("/api/places/{$place->id}", [
             "upload" => $upload,
-            'body' => 'this is an updated test place',
+            'name' => 'Test (updated)',
+            'description' => 'Recently updated test place',
             'latitude' => 13,
             'longitude' => 12,
-            'visibility' => 1,
+            'visibility' => 1
         ]);
         // Check OK response
         $this->_test_ok($response, 201);
@@ -182,8 +195,12 @@ class placesTest extends TestCase
             fn($id) => !empty($id)
         );
         $response->assertJsonPath(
-            "data.body",
-            fn($body) => !empty($body)
+            "data.name",
+            fn($name) => !empty($name)
+        );
+        $response->assertJsonPath(
+            "data.description",
+            fn($description) => !empty($description)
         );
         $response->assertJsonPath(
             "data.longitude",
@@ -205,9 +222,11 @@ class placesTest extends TestCase
         // Upload fake file using API web service
         $response = $this->postJson("/api/places", [
             "upload" => $upload,
-            'body' => 'this is a test place',
+            'name' => 'Test (updated)',
+            'description' => 'Recently updated test place',
             'latitude' => 13,
-            'longitude' => 12
+            'longitude' => 12,
+            'visibility' => 1
         ]);
         // Check ERROR response
         $this->_test_error($response);
@@ -219,9 +238,11 @@ class placesTest extends TestCase
         $fakeFile = UploadedFile::fake()->create('test-file.jpg');
         $response = $this->putJson("/api/places/{$id}", [
             'upload' => $fakeFile,
-            'body' => 'this is a test place',
+            'name' => 'Test (updated)',
+            'description' => 'Recently updated test place',
             'latitude' => 13,
-            'longitude' => 12
+            'longitude' => 12,
+            'visibility' => 1
         ]);
         $this->_test_notfound($response);
     }
@@ -231,7 +252,7 @@ class placesTest extends TestCase
     public function test_place_favorite(object $place)
     {
         Sanctum::actingAs(self::$testUser);
-        $response = $this->postJson("/api/places/{$place->id}/favorite");
+        $response = $this->postJson("/api/places/{$place->id}/favorites");
         $this->_test_ok($response);
     }
     /**
@@ -240,7 +261,7 @@ class placesTest extends TestCase
     public function test_place_unfavorite(object $place)
     {
         Sanctum::actingAs(self::$testUser);
-        $response = $this->deleteJson("/api/places/{$place->id}/favorite");
+        $response = $this->deleteJson("/api/places/{$place->id}/favorites");
         $this->_test_ok($response);
         $response->assertJson([
             "message" => "deleted",
