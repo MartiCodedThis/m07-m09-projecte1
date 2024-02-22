@@ -77,7 +77,7 @@ class PlaceController extends Controller
                         'latitude' => $request->input('latitude'),
                         'longitude' => $request->input('longitude'),
                         'visibility_id' => $request->input('visibility'),
-                        'author_id' => $request->user()->id
+                        'author_id' => 1
                     ]);
                     \Log::debug("DB storage OK");
                     // Patró PRG amb missatge d'èxit
@@ -185,7 +185,7 @@ class PlaceController extends Controller
                     'latitude' => $request->input('latitude'),
                     'longitude' => $request->input('longitude'),
                     'visibility_id' => $request->input('visibility'),
-                    'author_id' => $request->user()->id
+                    'author_id' => 1
                 ]);
                 \Log::debug("DB storage OK");
                 return response()->json([
@@ -209,58 +209,73 @@ class PlaceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Place $place)
+    public function destroy($place_id)
     {
-        $filepath = $place->file->filepath;
-        if ($filepath) {
-            \Storage::disk('public')->delete($filepath);
-            $place->delete();
-            $place->file->delete();
-            return response()->json([
-                'success' => true,
-                'data' => $place
-            ]);
+        $place = Place::find($place_id);
+        if ($place) {
+            $filepath = $place->file->filepath;
+            if ($filepath) {
+                \Storage::disk('public')->delete($filepath);
+                $place->delete();
+                $place->file->delete();
+                return response()->json([
+                    'success' => true,
+                    'data' => $place
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Wrong filepath'
+                ], 500);
+            }
         } else {
             return response()->json([
-                'success' => false,
-                'message' => 'Wrong filepath'
-            ], 500);
+                'success' => False,
+                'message' => 'Place was not found'
+            ], 404);
         }
     }
 
-    public function favorite(Request $request, Place $place)
+    public function favorite(Request $request, $place_id)
     {
-        $user_id = $request->user()->id;
-        $place_id = $place->id;
+        $place = Place::find($place_id);
+        if ($place) {
+            $user_id = $request->user()->id;
 
-        $favExists = Favorite::where('user_id', $user_id)
-            ->where('place_id', $place_id)
-            ->first();
+            $favExists = Favorite::where('user_id', $user_id)
+                ->where('place_id', $place_id)
+                ->first();
 
-        if ($favExists) {
-            \Log::debug('Removing place from favorites');
-            try {
-                $rm = $favExists->delete();
-                \Log::debug($rm ? "Deleted!" : "Not deleted :-(");
-                return response()->json([
-                    'success' => true,
-                    'data' => $favExists,
-                    'message' => 'deleted'
-                ], 200);
-            } catch (\Exception $e) {
-                \Log::debug($e->getMessage());
+            if ($favExists) {
+                \Log::debug('Removing place from favorites');
+                try {
+                    $rm = $favExists->delete();
+                    \Log::debug($rm ? "Deleted!" : "Not deleted :-(");
+                    return response()->json([
+                        'success' => true,
+                        'data' => $favExists,
+                        'message' => 'deleted'
+                    ], 200);
+                } catch (\Exception $e) {
+                    \Log::debug($e->getMessage());
+                }
+            } else {
+                \Log::debug('Adding place from favorites');
+                $favorite = Favorite::create([
+                    'user_id' => $user_id,
+                    'place_id' => $place_id
+                ]);
             }
+            return response()->json([
+                'success' => true,
+                'data' => $favorite
+            ], 200);
         } else {
-            \Log::debug('Adding place from favorites');
-            $favorite = Favorite::create([
-                'user_id' => $user_id,
-                'place_id' => $place_id
-            ]);
+            return response()->json([
+                'success' => False,
+                'message' => 'Place was not found'
+            ], 404);
         }
-        return response()->json([
-            'success' => true,
-            'data' => $favorite
-        ], 200);
     }
     public function update_workaround(Request $request, $id)
     {
