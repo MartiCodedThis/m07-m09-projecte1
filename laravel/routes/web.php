@@ -68,5 +68,4 @@ Route::get('logo', function () {
 })->name('logo');
 
 
-
 require __DIR__.'/auth.php';
